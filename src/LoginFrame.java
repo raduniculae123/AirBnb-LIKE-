@@ -1,4 +1,4 @@
-
+package com2008project;
 
 import java.awt.EventQueue;
 
@@ -18,6 +18,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import javax.swing.JOptionPane;
 
 import javax.swing.JButton;
 import javax.swing.JPasswordField;
@@ -105,6 +106,7 @@ public class LoginFrame {
 					ResultSet rs = stmt.executeQuery();
 					if (rs.next()) {
 						System.out.println("OK");
+						JOptionPane.showMessageDialog(null, "Login Succesful!");
 						PreparedStatement stmt2 = conn.prepareStatement(SQL_GET_STATUS);
 						{
 							stmt2.setString(1, email_txtField.getText());
@@ -130,10 +132,9 @@ public class LoginFrame {
 										stmt3.setString(1, email_txtField.getText());
 										ResultSet rs3 = stmt3.executeQuery();
 										if (rs3.next()) {
-											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
-											GuestMenuFrame window = new GuestMenuFrame(userId);
-											window.guestMenuframe.setVisible(true);
+											//HostMenuFrame window = new HostMenuFrame(userId); GUEST MENU
+											//window.hostMenuFrame.setVisible(true);
 											frmLogin.dispose();
 										}
 									}
@@ -143,6 +144,7 @@ public class LoginFrame {
 
 					} else {
 						System.out.println("Not OK");
+						JOptionPane.showMessageDialog(null, "Account or Password wrong ");
 					}
 				}
 
