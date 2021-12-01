@@ -95,6 +95,7 @@ public class EnquirerMenuFrame {
 		enquirerMenuFrame.getContentPane().add(location_lbl);
 
 		startDate_txtField = new JTextField();
+		startDate_txtField.setEditable(false);
 		startDate_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		startDate_txtField.setBounds(694, 47, 146, 36);
 		enquirerMenuFrame.getContentPane().add(startDate_txtField);
@@ -127,6 +128,7 @@ public class EnquirerMenuFrame {
 		enquirerMenuFrame.getContentPane().add(startDate_btn);
 
 		endDate_txtField = new JTextField();
+		endDate_txtField.setEditable(false);
 		endDate_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		endDate_txtField.setColumns(10);
 		endDate_txtField.setBounds(896, 47, 146, 36);
