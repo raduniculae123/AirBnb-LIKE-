@@ -25,12 +25,14 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
+import javax.swing.JScrollPane;
 
 public class AddPropertyFrame {
 
 	JFrame frmAddProperty;
 	private JTextField propertyName_txtField;
 	private JLabel description_lbl;
+	private JTextArea description_txtField;
 	private JLabel propertyName_lbl_3;
 	private JLabel address_lbl;
 	private JTextField location_txtField;
@@ -53,7 +55,7 @@ public class AddPropertyFrame {
 
 	private JLabel changeBands_lbl;
 	private JButton addChangeBands_btn;
-	private JTextArea description_txtField;
+	private JScrollPane scrollPane;
 
 	
 
@@ -75,43 +77,30 @@ public class AddPropertyFrame {
 		frmAddProperty.getContentPane().setFont(new Font("Tahoma", Font.PLAIN, 40));
 		frmAddProperty.setBounds(100, 100, 1080, 720);
 		frmAddProperty.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GridBagLayout gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[] { 92, 30, 0, 0, 81, 283, 430, 30, 30, 314, -49, 0, 0, 0, 0, 11, 0 };
-
-		gridBagLayout.rowHeights = new int[] { 48, 0, 32, 33, 24, 75, 33, 0, 34, 27, 18, 0, -22, 35, 59, 0, 0, 0, 0 };
-
-		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
-				0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
-				0.0, 0.0, 0.0, 0.0, 0.0 };
-		frmAddProperty.getContentPane().setLayout(gridBagLayout);
+		frmAddProperty.getContentPane().setLayout(null);
 
 		JLabel addProperty_lbl = new JLabel("Add Property");
+		addProperty_lbl.setBounds(469, 43, 231, 49);
 		addProperty_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
-		GridBagConstraints gbc_addProperty_lbl = new GridBagConstraints();
-		gbc_addProperty_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_addProperty_lbl.gridx = 6;
-		gbc_addProperty_lbl.gridy = 1;
-		frmAddProperty.getContentPane().add(addProperty_lbl, gbc_addProperty_lbl);
+		frmAddProperty.getContentPane().add(addProperty_lbl);
 
 		JLabel propertyName_lbl = new JLabel("Property's name:");
+		propertyName_lbl.setBounds(147, 129, 185, 31);
 		propertyName_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_propertyName_lbl = new GridBagConstraints();
-		gbc_propertyName_lbl.anchor = GridBagConstraints.WEST;
-		gbc_propertyName_lbl.fill = GridBagConstraints.VERTICAL;
-		gbc_propertyName_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_propertyName_lbl.gridx = 5;
-		gbc_propertyName_lbl.gridy = 3;
-		frmAddProperty.getContentPane().add(propertyName_lbl, gbc_propertyName_lbl);
+		frmAddProperty.getContentPane().add(propertyName_lbl);
+		
+		scrollPane = new JScrollPane();
+		scrollPane.setBounds(430, 170, 309, 83);
+		frmAddProperty.getContentPane().add(scrollPane);
 
+		JTextArea description_txtField_1 = new JTextArea();
+		scrollPane.setViewportView(description_txtField_1);
+		
+		
 		propertyName_txtField = new JTextField();
+		propertyName_txtField.setBounds(430, 129, 309, 31);
 		propertyName_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		GridBagConstraints gbc_propertyName_txtField = new GridBagConstraints();
-		gbc_propertyName_txtField.insets = new Insets(0, 0, 5, 5);
-		gbc_propertyName_txtField.fill = GridBagConstraints.BOTH;
-		gbc_propertyName_txtField.gridx = 6;
-		gbc_propertyName_txtField.gridy = 3;
-		frmAddProperty.getContentPane().add(propertyName_txtField, gbc_propertyName_txtField);
+		frmAddProperty.getContentPane().add(propertyName_txtField);
 		propertyName_txtField.setColumns(10);
 		propertyName_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
@@ -123,43 +112,28 @@ public class AddPropertyFrame {
 		});
 
 		description_lbl = new JLabel("Description:");
+		description_lbl.setBounds(147, 195, 130, 30);
 		description_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_description_lbl = new GridBagConstraints();
-		gbc_description_lbl.anchor = GridBagConstraints.NORTHWEST;
-		gbc_description_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_description_lbl.gridx = 5;
-		gbc_description_lbl.gridy = 5;
-		frmAddProperty.getContentPane().add(description_lbl, gbc_description_lbl);
-		
-		description_txtField = new JTextArea();
-		description_txtField.setWrapStyleWord(true);
-		description_txtField.setLineWrap(true);
-		description_txtField.setFont(new Font("Monospaced", Font.PLAIN, 18));
-		GridBagConstraints gbc_description_txtField = new GridBagConstraints();
-		gbc_description_txtField.insets = new Insets(0, 0, 5, 5);
-		gbc_description_txtField.fill = GridBagConstraints.BOTH;
-		gbc_description_txtField.gridx = 6;
-		gbc_description_txtField.gridy = 5;
-		frmAddProperty.getContentPane().add(description_txtField, gbc_description_txtField);
+		frmAddProperty.getContentPane().add(description_lbl);
+		description_txtField_1.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (areAllCompleted())
+					next_btn.setEnabled(true);
+				else
+					next_btn.setEnabled(false);
+			}
+		});
 
 		propertyName_lbl_3 = new JLabel("Location (area):");
+		propertyName_lbl_3.setBounds(147, 263, 174, 31);
 		propertyName_lbl_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_propertyName_lbl_3 = new GridBagConstraints();
-		gbc_propertyName_lbl_3.anchor = GridBagConstraints.WEST;
-		gbc_propertyName_lbl_3.insets = new Insets(0, 0, 5, 5);
-		gbc_propertyName_lbl_3.gridx = 5;
-		gbc_propertyName_lbl_3.gridy = 7;
-		frmAddProperty.getContentPane().add(propertyName_lbl_3, gbc_propertyName_lbl_3);
+		frmAddProperty.getContentPane().add(propertyName_lbl_3);
 
 		location_txtField = new JTextField();
+		location_txtField.setBounds(430, 263, 309, 31);
 		location_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		location_txtField.setColumns(10);
-		GridBagConstraints gbc_location_txtField = new GridBagConstraints();
-		gbc_location_txtField.insets = new Insets(0, 0, 5, 5);
-		gbc_location_txtField.fill = GridBagConstraints.HORIZONTAL;
-		gbc_location_txtField.gridx = 6;
-		gbc_location_txtField.gridy = 7;
-		frmAddProperty.getContentPane().add(location_txtField, gbc_location_txtField);
+		frmAddProperty.getContentPane().add(location_txtField);
 		location_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (areAllCompleted())
@@ -170,15 +144,12 @@ public class AddPropertyFrame {
 		});
 
 		address_lbl = new JLabel("Address:");
+		address_lbl.setBounds(147, 337, 95, 31);
 		address_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_address_lbl = new GridBagConstraints();
-		gbc_address_lbl.anchor = GridBagConstraints.WEST;
-		gbc_address_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_address_lbl.gridx = 5;
-		gbc_address_lbl.gridy = 9;
-		frmAddProperty.getContentPane().add(address_lbl, gbc_address_lbl);
+		frmAddProperty.getContentPane().add(address_lbl);
 
 		addAddress_btn = new JButton("Add address");
+		addAddress_btn.setBounds(469, 333, 231, 39);
 		addAddress_btn.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		addAddress_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -189,22 +160,15 @@ public class AddPropertyFrame {
 				addChangeBands_btn.setEnabled(true);
 			}
 		});
-		GridBagConstraints gbc_addAddress_btn = new GridBagConstraints();
-		gbc_addAddress_btn.insets = new Insets(0, 0, 5, 5);
-		gbc_addAddress_btn.gridx = 6;
-		gbc_addAddress_btn.gridy = 9;
-		frmAddProperty.getContentPane().add(addAddress_btn, gbc_addAddress_btn);
+		frmAddProperty.getContentPane().add(addAddress_btn);
 
 		facilities_lbl = new JLabel("Facilities: ");
+		facilities_lbl.setBounds(147, 411, 108, 31);
 		facilities_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_facilities_lbl = new GridBagConstraints();
-		gbc_facilities_lbl.anchor = GridBagConstraints.WEST;
-		gbc_facilities_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_facilities_lbl.gridx = 5;
-		gbc_facilities_lbl.gridy = 11;
-		frmAddProperty.getContentPane().add(facilities_lbl, gbc_facilities_lbl);
+		frmAddProperty.getContentPane().add(facilities_lbl);
 
 		addFacilities_btn = new JButton("Add facilities");
+		addFacilities_btn.setBounds(469, 407, 231, 39);
 		addFacilities_btn.setEnabled(false);
 		addFacilities_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -213,13 +177,10 @@ public class AddPropertyFrame {
 			}
 		});
 		addFacilities_btn.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_addFacilities_btn = new GridBagConstraints();
-		gbc_addFacilities_btn.insets = new Insets(0, 0, 5, 5);
-		gbc_addFacilities_btn.gridx = 6;
-		gbc_addFacilities_btn.gridy = 11;
-		frmAddProperty.getContentPane().add(addFacilities_btn, gbc_addFacilities_btn);
+		frmAddProperty.getContentPane().add(addFacilities_btn);
 
 		next_btn = new JButton("Next");
+		next_btn.setBounds(539, 584, 116, 39);
 		next_btn.setEnabled(false);
 		next_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -241,7 +202,7 @@ public class AddPropertyFrame {
 					}
 					System.out.println("prop id din : " + propertyId);
 					stmt.setString(1, propertyName_txtField.getText());
-					stmt.setString(2, description_txtField.getText());
+					stmt.setString(2, description_txtField_1.getText());
 					stmt.setString(3, location_txtField.getText());
 					stmt.setString(4, isBreakfastString);
 					stmt.setString(5, house);
@@ -265,15 +226,12 @@ public class AddPropertyFrame {
 			}
 		});
 		changeBands_lbl = new JLabel("Change bands:");
+		changeBands_lbl.setBounds(147, 455, 163, 31);
 		changeBands_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_changeBands_lbl = new GridBagConstraints();
-		gbc_changeBands_lbl.anchor = GridBagConstraints.WEST;
-		gbc_changeBands_lbl.insets = new Insets(0, 0, 5, 5);
-		gbc_changeBands_lbl.gridx = 5;
-		gbc_changeBands_lbl.gridy = 13;
-		frmAddProperty.getContentPane().add(changeBands_lbl, gbc_changeBands_lbl);
+		frmAddProperty.getContentPane().add(changeBands_lbl);
 		
 		addChangeBands_btn = new JButton("Add change bands");
+		addChangeBands_btn.setBounds(451, 451, 267, 39);
 		addChangeBands_btn.setEnabled(false);
 		addChangeBands_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -282,32 +240,20 @@ public class AddPropertyFrame {
 			}
 		});
 		addChangeBands_btn.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		GridBagConstraints gbc_addChangeBands_btn = new GridBagConstraints();
-		gbc_addChangeBands_btn.insets = new Insets(0, 0, 5, 5);
-		gbc_addChangeBands_btn.gridx = 6;
-		gbc_addChangeBands_btn.gridy = 13;
-		frmAddProperty.getContentPane().add(addChangeBands_btn, gbc_addChangeBands_btn);
+		frmAddProperty.getContentPane().add(addChangeBands_btn);
 
 				
 				isBreakfast_chkbox = new JCheckBox("Breakfast included:  ");
+				isBreakfast_chkbox.setBounds(147, 502, 249, 39);
 				isBreakfast_chkbox.setHorizontalTextPosition(SwingConstants.LEFT);
 				isBreakfast_chkbox.setFont(new Font("Tahoma", Font.PLAIN, 25));
 				isBreakfast_chkbox.setBackground(Color.ORANGE);
-				GridBagConstraints gbc_isBreakfast_chkbox = new GridBagConstraints();
-				gbc_isBreakfast_chkbox.anchor = GridBagConstraints.WEST;
-				gbc_isBreakfast_chkbox.insets = new Insets(0, 0, 5, 5);
-				gbc_isBreakfast_chkbox.gridx = 5;
-				gbc_isBreakfast_chkbox.gridy = 14;
-				frmAddProperty.getContentPane().add(isBreakfast_chkbox, gbc_isBreakfast_chkbox);
+				frmAddProperty.getContentPane().add(isBreakfast_chkbox);
 		
 				
 		next_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-
-		GridBagConstraints gbc_next_btn = new GridBagConstraints();
-		gbc_next_btn.insets = new Insets(0, 0, 5, 5);
-		gbc_next_btn.gridx = 6;
-		gbc_next_btn.gridy = 16;
-		frmAddProperty.getContentPane().add(next_btn, gbc_next_btn);
+		frmAddProperty.getContentPane().add(next_btn);
+		
 		
 		
 
@@ -324,7 +270,4 @@ public class AddPropertyFrame {
 
 		return ok;
 	}
-	
-	
-
 }
