@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextArea;
 
 public class AddPropertyFrame {
 
@@ -32,7 +33,6 @@ public class AddPropertyFrame {
 	private JLabel description_lbl;
 	private JLabel propertyName_lbl_3;
 	private JLabel address_lbl;
-	private JTextField description_txtField;
 	private JTextField location_txtField;
 	private JButton next_btn;
 	private int userId, propertyId;
@@ -53,6 +53,7 @@ public class AddPropertyFrame {
 
 	private JLabel changeBands_lbl;
 	private JButton addChangeBands_btn;
+	private JTextArea description_txtField;
 
 	
 
@@ -81,7 +82,7 @@ public class AddPropertyFrame {
 
 		gridBagLayout.columnWeights = new double[] { 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0,
 				0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0,
 				0.0, 0.0, 0.0, 0.0, 0.0 };
 		frmAddProperty.getContentPane().setLayout(gridBagLayout);
 
@@ -129,24 +130,17 @@ public class AddPropertyFrame {
 		gbc_description_lbl.gridx = 5;
 		gbc_description_lbl.gridy = 5;
 		frmAddProperty.getContentPane().add(description_lbl, gbc_description_lbl);
-
-		description_txtField = new JTextField();
-		description_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		description_txtField.setColumns(10);
+		
+		description_txtField = new JTextArea();
+		description_txtField.setWrapStyleWord(true);
+		description_txtField.setLineWrap(true);
+		description_txtField.setFont(new Font("Monospaced", Font.PLAIN, 18));
 		GridBagConstraints gbc_description_txtField = new GridBagConstraints();
 		gbc_description_txtField.insets = new Insets(0, 0, 5, 5);
 		gbc_description_txtField.fill = GridBagConstraints.BOTH;
 		gbc_description_txtField.gridx = 6;
 		gbc_description_txtField.gridy = 5;
 		frmAddProperty.getContentPane().add(description_txtField, gbc_description_txtField);
-		description_txtField.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (areAllCompleted())
-					next_btn.setEnabled(true);
-				else
-					next_btn.setEnabled(false);
-			}
-		});
 
 		propertyName_lbl_3 = new JLabel("Location (area):");
 		propertyName_lbl_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
