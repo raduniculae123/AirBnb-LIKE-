@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import java.sql.ResultSetMetaData;
 import javax.swing.JTextPane;
 import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
 
 public class ViewPropertyFrame {
 	
@@ -65,9 +66,7 @@ public class ViewPropertyFrame {
 	private void initialize(int propertyID) {
 		frmViewProperty = new JFrame();
 		frmViewProperty.getContentPane().setBackground(Color.ORANGE);
-		frmViewProperty.getContentPane().setLayout(null);		
-		
-		
+		frmViewProperty.getContentPane().setLayout(null);
 		
 		frmViewProperty.setBounds(100, 100, 1080, 720);
 		frmViewProperty.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -161,10 +160,16 @@ public class ViewPropertyFrame {
 					bedroomString = bedroomString.substring(0, bedroomString.length()-2);
 					System.out.println(bedroomString);
 					
-					JLabel bedroomList_lbl = new JLabel(bedroomString);
-					bedroomList_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
-					bedroomList_lbl.setBounds(239, 221, 801, 35);
-					frmViewProperty.getContentPane().add(bedroomList_lbl);
+					JScrollPane scrollPane_1 = new JScrollPane();
+					scrollPane_1.setBounds(72, 222, 984, 58);
+					frmViewProperty.getContentPane().add(scrollPane_1);
+					
+					JTextArea bedroom_lbl = new JTextArea();
+					scrollPane_1.setViewportView(bedroom_lbl);
+					bedroom_lbl.setBackground(Color.ORANGE);
+					bedroom_lbl.setText(bedroomString);
+					bedroom_lbl.setFont(new Font("Tahoma", Font.PLAIN, 23));
+					bedroom_lbl.setEditable(false);
 				}
 				
 				//getting the bathing facilities
@@ -227,14 +232,17 @@ public class ViewPropertyFrame {
 					}
 					bathroomString = bathroomString.substring(0, bathroomString.length()-2);
 					System.out.println(bathroomString);
-					
 					JScrollPane scrollPane = new JScrollPane();
-					scrollPane.setBounds(68, 354, 988, 35);
+					scrollPane.setBounds(69, 355, 987, 65);
 					frmViewProperty.getContentPane().add(scrollPane);
 					
-					JLabel bathroomList_lbl = new JLabel(bathroomString);
-					scrollPane.setViewportView(bathroomList_lbl);
-					bathroomList_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
+					JTextArea bathroom_lbl = new JTextArea();
+					bathroom_lbl.setBackground(Color.ORANGE);
+					bathroom_lbl.setText(bathroomString);
+					bathroom_lbl.setEditable(false);
+					bathroom_lbl.setFont(new Font("Tahoma", Font.PLAIN, 23));
+					scrollPane.setViewportView(bathroom_lbl);
+					
 				}
 				
 				//getting the kitchen facilities
