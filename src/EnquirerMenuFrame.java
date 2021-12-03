@@ -32,10 +32,11 @@ public class EnquirerMenuFrame {
 	private JButton endDate_btn;
 	private JTextField startDate_txtField;
 	private JTextField endDate_txtField;
+	private static int[] propertyIdArray = new int[1000];
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
-	static final String SQL_QUERY = "SELECT shortName, description, location, breakfast from team002.properties where isAvailable=1";
+	static final String SQL_QUERY = "SELECT id, shortName, description, location, breakfast from team002.properties where isAvailable=1";
 	static final String SQL_QUERY_SEARCH1 = "SELECT propertyID from team002.bookings where status=0 AND (startDate NOT BETWEEN ? AND ? ) AND (endDate NOT BETWEEN ? AND ?) AND((startDate < ? AND endDate <?) OR (startDate > ? AND endDate > ?))";
 	static final String SQL_QUERY_SEARCH2 = "SELECT shortName, description, location, breakfast from team002.properties where isAvailable=1 AND location LIKE ? AND id=?";
 
@@ -179,6 +180,7 @@ public class EnquirerMenuFrame {
 		JButton search_btn = new JButton("Search");
 		search_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				int rowNr = 0;
 				model.setRowCount(0);
 				String location = "%" + location_txtField.getText() + "%";
 
@@ -213,6 +215,9 @@ public class EnquirerMenuFrame {
 							}
 							model.addRow(new Object[] { rs2.getString("shortName"), rs2.getString("description"),
 									rs2.getString("location"), hasBreakfast });
+							propertyIdArray[rowNr] = rs1.getInt("propertyID");
+							rowNr++;
+							
 						}
 					}
 					enquirer_table.setModel(model);
@@ -239,6 +244,7 @@ public class EnquirerMenuFrame {
 		{
 
 			ResultSet rs = stmt.executeQuery();
+			int rowNr = 0;
 			while (rs.next()) {
 				String hasBreakfast;
 				if (rs.getInt("breakfast") == 1) {
@@ -248,6 +254,8 @@ public class EnquirerMenuFrame {
 				}
 				model.addRow(new Object[] { rs.getString("shortName"), rs.getString("description"),
 						rs.getString("location"), hasBreakfast });
+				propertyIdArray[rowNr] = rs.getInt("id");
+				rowNr++;
 			}
 			enquirer_table.setModel(model);
 
@@ -255,12 +263,24 @@ public class EnquirerMenuFrame {
 			enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(544);
 			enquirer_table.getColumnModel().getColumn(2).setPreferredWidth(200);
 			enquirer_table.getColumnModel().getColumn(3).setPreferredWidth(100);
+			
 
 		}
 
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+
+		enquirer_table.addMouseListener(new java.awt.event.MouseAdapter() {
+			public void mouseClicked(java.awt.event.MouseEvent e) {
+				int row = enquirer_table.rowAtPoint(e.getPoint());
+				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row]);
+				window.frmViewProperty.setVisible(true);
+				enquirerMenuFrame.dispose();
+			}
+		});
+
+		
 		enquirer_table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 20));
 		enquirerMenuFrame.setBounds(100, 100, 1080, 720);
 		enquirerMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

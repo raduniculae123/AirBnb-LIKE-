@@ -35,7 +35,7 @@ public class ViewPropertyFrame {
 	private static final String SQL_QUERY_LIVINGS = "SELECT wifi, TV, satellite, streaming, DVDplayer, boardGames FROM team002.livings WHERE facilityID=?";
 	private static final String SQL_QUERY_OUTDOORS = "SELECT onSiteParking, onRoadParking, paidParking, patio, barbeque FROM team002.outdoors WHERE facilityID=?";
 	private static final String SQL_QUERY_UTILITIES = "SELECT heating, washingMachine, dryingMachine, fireExtinguisher, smokeAlarm, firstAidKit FROM team002.utilities WHERE facilityID=?";
-	private JFrame frmViewProperty;
+	JFrame frmViewProperty;
 
 	/**
 	 * Launch the application.
