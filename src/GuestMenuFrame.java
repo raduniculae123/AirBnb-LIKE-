@@ -29,6 +29,7 @@ public class GuestMenuFrame {
 	private static final String SQL_QUERY2 = "SELECT shortName FROM team002.properties where id=?";
 	private static final String SQL_GET_STATUS = "select host from team002.users where id=?";
 	private JButton host_btn;
+	private JButton enquirer_btn;
 
 	/**
 	 * Create the application.
@@ -74,7 +75,7 @@ public class GuestMenuFrame {
 		});
 		host_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		host_btn.setEnabled(false);
-		host_btn.setBounds(795, 30, 230, 45);
+		host_btn.setBounds(559, 30, 230, 45);
 		guestMenuframe.getContentPane().add(host_btn);
 		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				PreparedStatement stmt2 = conn.prepareStatement(SQL_GET_STATUS);) {
@@ -132,6 +133,18 @@ public class GuestMenuFrame {
 			properties_table.setModel(model);
 			properties_table.setAutoResizeMode(0);
 			properties_table.setRowHeight(26);
+			
+			enquirer_btn = new JButton("Enquirer menu");
+			enquirer_btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					EnquirerMenuFrame window = new EnquirerMenuFrame();
+					window.enquirerMenuFrame.setVisible(true);
+					guestMenuframe.dispose();
+				}
+			});
+			enquirer_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
+			enquirer_btn.setBounds(799, 30, 255, 45);
+			guestMenuframe.getContentPane().add(enquirer_btn);
 
 			properties_table.getColumnModel().getColumn(0).setPreferredWidth(261);
 			properties_table.getColumnModel().getColumn(1).setPreferredWidth(261);

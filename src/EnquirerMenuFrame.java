@@ -72,7 +72,7 @@ public class EnquirerMenuFrame {
 		enquirerMenuFrame.getContentPane().setLayout(null);
 
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 134, 1046, 539);
+		scrollPane.setBounds(10, 134, 1046, 411);
 		enquirerMenuFrame.getContentPane().add(scrollPane);
 
 		enquirer_table = new JTable();
@@ -258,6 +258,30 @@ public class EnquirerMenuFrame {
 				rowNr++;
 			}
 			enquirer_table.setModel(model);
+			
+			JButton login_btn = new JButton("Log in");
+			login_btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LoginFrame window = new LoginFrame(1, 0);
+					window.frmLogin.setVisible(true);
+					enquirerMenuFrame.dispose();
+				}
+			});
+			login_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+			login_btn.setBounds(445, 556, 193, 49);
+			enquirerMenuFrame.getContentPane().add(login_btn);
+			
+			JButton register_btn = new JButton("Register");
+			register_btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					RegistrationFrame window = new RegistrationFrame(1, 0);
+					window.frmRegister.setVisible(true);
+					enquirerMenuFrame.dispose();
+				}
+			});
+			register_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+			register_btn.setBounds(445, 616, 193, 49);
+			enquirerMenuFrame.getContentPane().add(register_btn);
 
 			enquirer_table.getColumnModel().getColumn(0).setPreferredWidth(200);
 			enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(544);
