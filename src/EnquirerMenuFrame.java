@@ -27,7 +27,7 @@ import javax.swing.JScrollPane;
 
 public class EnquirerMenuFrame {
 
-	private JFrame enquirerMenuFrame;
+	JFrame enquirerMenuFrame;
 	private JTable enquirer_table;
 	private JButton endDate_btn;
 	private JTextField startDate_txtField;
@@ -217,7 +217,7 @@ public class EnquirerMenuFrame {
 									rs2.getString("location"), hasBreakfast });
 							propertyIdArray[rowNr] = rs1.getInt("propertyID");
 							rowNr++;
-							
+
 						}
 					}
 					enquirer_table.setModel(model);
@@ -263,7 +263,6 @@ public class EnquirerMenuFrame {
 			enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(544);
 			enquirer_table.getColumnModel().getColumn(2).setPreferredWidth(200);
 			enquirer_table.getColumnModel().getColumn(3).setPreferredWidth(100);
-			
 
 		}
 
@@ -274,13 +273,12 @@ public class EnquirerMenuFrame {
 		enquirer_table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				int row = enquirer_table.rowAtPoint(e.getPoint());
-				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row]);
+				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row], 0, 0);
 				window.frmViewProperty.setVisible(true);
 				enquirerMenuFrame.dispose();
 			}
 		});
 
-		
 		enquirer_table.getTableHeader().setFont(new Font("Tahoma", Font.BOLD, 20));
 		enquirerMenuFrame.setBounds(100, 100, 1080, 720);
 		enquirerMenuFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

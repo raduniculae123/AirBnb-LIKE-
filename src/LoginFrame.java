@@ -1,5 +1,4 @@
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -46,7 +45,7 @@ public class LoginFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					LoginFrame window = new LoginFrame();
+					LoginFrame window = new LoginFrame(1, 0);
 					window.frmLogin.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -58,15 +57,15 @@ public class LoginFrame {
 	/**
 	 * Create the application.
 	 */
-	public LoginFrame() {
+	public LoginFrame(int fromWhere, int properyID) {
 		System.out.println("miau");
-		initialize();
+		initialize(fromWhere, properyID);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(int fromWhere, int properyID) {
 		frmLogin = new JFrame();
 		frmLogin.setTitle("Login");
 		frmLogin.setBounds(100, 100, 1080, 720);
@@ -118,13 +117,17 @@ public class LoginFrame {
 										ResultSet rs3 = stmt3.executeQuery();
 										if (rs3.next()) {
 											int userId = ((Number) rs3.getObject(1)).intValue();
-											HostMenuFrame window = new HostMenuFrame(userId);
-											window.hostMenuFrame.setVisible(true);
+											if (fromWhere == 0) {
+												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId);
+												window2.frmViewProperty.setVisible(true);
+											} else {
+												HostMenuFrame window = new HostMenuFrame(userId);
+												window.hostMenuFrame.setVisible(true);
+											}
 											frmLogin.dispose();
 										}
 									}
-								}
-								else {
+								} else {
 									PreparedStatement stmt3 = conn.prepareStatement(SQL_GET_ID);
 									{
 										stmt3.setString(1, email_txtField.getText());

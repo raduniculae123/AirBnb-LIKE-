@@ -144,7 +144,7 @@ public class RegistrationFrame {
 
 					System.out.println("Inserted record's ID: " + generatedKey);
 					frmRegister.dispose();
-					LoginFrame window = new LoginFrame();
+					LoginFrame window = new LoginFrame(1, 0);
 					window.frmLogin.setVisible(true);
 
 				} catch (SQLException e1) {
@@ -232,7 +232,7 @@ public class RegistrationFrame {
 		toLogin_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frmRegister.dispose();
-				LoginFrame window = new LoginFrame();
+				LoginFrame window = new LoginFrame(1, 0);
 				window.frmLogin.setVisible(true);
 			}
 		});

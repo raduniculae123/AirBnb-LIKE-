@@ -78,7 +78,7 @@ public class HostMenuFrame {
 
 		JButton addProperty_btn = new JButton("Add property");
 		addProperty_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		addProperty_btn.setBounds(446, 30, 230, 45);
+		addProperty_btn.setBounds(270, 30, 230, 45);
 		hostMenuFrame.getContentPane().add(addProperty_btn);
 		addProperty_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -116,7 +116,7 @@ public class HostMenuFrame {
 			}
 		});
 		guest_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
-		guest_btn.setBounds(800, 30, 230, 45);
+		guest_btn.setBounds(510, 30, 230, 45);
 		hostMenuFrame.getContentPane().add(guest_btn);
 		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 				PreparedStatement stmt2 = conn.prepareStatement(SQL_GET_STATUS);) {
@@ -162,6 +162,18 @@ public class HostMenuFrame {
 			myProperties_table.setModel(model);
 			myProperties_table.setAutoResizeMode(0);
 			myProperties_table.setRowHeight(26);
+			
+			JButton enquirer_btn = new JButton("Enquirer menu");
+			enquirer_btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					EnquirerMenuFrame window = new EnquirerMenuFrame();
+					window.enquirerMenuFrame.setVisible(true);
+					hostMenuFrame.dispose();
+				}
+			});
+			enquirer_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
+			enquirer_btn.setBounds(754, 30, 255, 45);
+			hostMenuFrame.getContentPane().add(enquirer_btn);
 
 			myProperties_table.getColumnModel().getColumn(0).setPreferredWidth(460);
 			myProperties_table.getColumnModel().getColumn(1).setPreferredWidth(460);
