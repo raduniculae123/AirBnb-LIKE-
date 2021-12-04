@@ -32,13 +32,13 @@ public class EnquirerMenuFrame {
 	private JButton endDate_btn;
 	private JTextField startDate_txtField;
 	private JTextField endDate_txtField;
-	private static int[] propertyIdArray = new int[1000];
+	private static int[] propertyIdArray = new int[10000];
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
-	static final String SQL_QUERY = "SELECT id, shortName, description, location, breakfast from team002.properties where isAvailable=1";
-	static final String SQL_QUERY_SEARCH1 = "SELECT propertyID from team002.bookings where status=0 AND (startDate NOT BETWEEN ? AND ? ) AND (endDate NOT BETWEEN ? AND ?) AND((startDate < ? AND endDate <?) OR (startDate > ? AND endDate > ?))";
-	static final String SQL_QUERY_SEARCH2 = "SELECT shortName, description, location, breakfast from team002.properties where isAvailable=1 AND location LIKE ? AND id=?";
+
+	static final String SQL_QUERY_SEARCH1 = "SELECT propertyID from team002.bookings where status=1 AND NOT((startDate NOT BETWEEN ? AND ? ) AND (endDate NOT BETWEEN ? AND ?) AND((startDate < ? AND endDate <?) OR (startDate > ? AND endDate > ?)))";
+	static final String SQL_QUERY_SEARCH2 = "SELECT id, shortName, description, location, breakfast from team002.properties where location LIKE ? AND id!=?";
 
 	/**
 	 * Launch the application.
@@ -89,6 +89,12 @@ public class EnquirerMenuFrame {
 		location_txtField.setFont(new Font("Dialog", Font.PLAIN, 20));
 		location_txtField.setBounds(369, 47, 270, 36);
 		enquirerMenuFrame.getContentPane().add(location_txtField);
+
+		JButton search_btn = new JButton("Search");
+		search_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+		search_btn.setBounds(896, 88, 146, 36);
+		enquirerMenuFrame.getContentPane().add(search_btn);
+		search_btn.setEnabled(false);
 
 		JLabel location_lbl = new JLabel("Location\r\n");
 		location_lbl.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -153,6 +159,7 @@ public class EnquirerMenuFrame {
 					public void actionPerformed(ActionEvent ae) {
 						endDate_txtField.setText(new DatePicker(f).setPickedDate());
 						f.dispose();
+						search_btn.setEnabled(true);
 					}
 				});
 			}
@@ -177,7 +184,6 @@ public class EnquirerMenuFrame {
 		model.addColumn("Location");
 		model.addColumn("Breakfast");
 
-		JButton search_btn = new JButton("Search");
 		search_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int rowNr = 0;
@@ -202,6 +208,23 @@ public class EnquirerMenuFrame {
 					stmt1.setString(8, eD);
 					ResultSet rs1 = stmt1.executeQuery();
 
+					if (!rs1.isBeforeFirst()) {
+						stmt2.setString(1, location);
+						stmt2.setString(2, "0");
+						ResultSet rs2 = stmt2.executeQuery();
+						while (rs2.next()) {
+							String hasBreakfast;
+							if (rs2.getInt("breakfast") == 1) {
+								hasBreakfast = "Yes";
+							} else {
+								hasBreakfast = "No";
+							}
+							model.addRow(new Object[] { rs2.getString("shortName"), rs2.getString("description"),
+									rs2.getString("location"), hasBreakfast });
+							propertyIdArray[rowNr] = rs2.getInt("id");
+							rowNr++;
+						}
+					}
 					while (rs1.next()) {
 						stmt2.setString(1, location);
 						stmt2.setString(2, String.valueOf(rs1.getInt("propertyID")));
@@ -220,10 +243,11 @@ public class EnquirerMenuFrame {
 
 						}
 					}
+
 					enquirer_table.setModel(model);
 
 					enquirer_table.getColumnModel().getColumn(0).setPreferredWidth(200);
-					enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(544);
+					enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(542);
 					enquirer_table.getColumnModel().getColumn(2).setPreferredWidth(200);
 					enquirer_table.getColumnModel().getColumn(3).setPreferredWidth(100);
 
@@ -233,66 +257,35 @@ public class EnquirerMenuFrame {
 
 			}
 		});
-		search_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-		search_btn.setBounds(896, 88, 146, 36);
-		enquirerMenuFrame.getContentPane().add(search_btn);
 
-		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
-
-				PreparedStatement stmt = conn.prepareStatement(SQL_QUERY);)
-
-		{
-
-			ResultSet rs = stmt.executeQuery();
-			int rowNr = 0;
-			while (rs.next()) {
-				String hasBreakfast;
-				if (rs.getInt("breakfast") == 1) {
-					hasBreakfast = "Yes";
-				} else {
-					hasBreakfast = "No";
-				}
-				model.addRow(new Object[] { rs.getString("shortName"), rs.getString("description"),
-						rs.getString("location"), hasBreakfast });
-				propertyIdArray[rowNr] = rs.getInt("id");
-				rowNr++;
+		JButton login_btn = new JButton("Log in");
+		login_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				LoginFrame window = new LoginFrame(1, 0);
+				window.frmLogin.setVisible(true);
+				enquirerMenuFrame.dispose();
 			}
-			enquirer_table.setModel(model);
-			
-			JButton login_btn = new JButton("Log in");
-			login_btn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					LoginFrame window = new LoginFrame(1, 0);
-					window.frmLogin.setVisible(true);
-					enquirerMenuFrame.dispose();
-				}
-			});
-			login_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-			login_btn.setBounds(445, 556, 193, 49);
-			enquirerMenuFrame.getContentPane().add(login_btn);
-			
-			JButton register_btn = new JButton("Register");
-			register_btn.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent e) {
-					RegistrationFrame window = new RegistrationFrame(1, 0);
-					window.frmRegister.setVisible(true);
-					enquirerMenuFrame.dispose();
-				}
-			});
-			register_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-			register_btn.setBounds(445, 616, 193, 49);
-			enquirerMenuFrame.getContentPane().add(register_btn);
+		});
+		login_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+		login_btn.setBounds(445, 556, 193, 49);
+		enquirerMenuFrame.getContentPane().add(login_btn);
 
-			enquirer_table.getColumnModel().getColumn(0).setPreferredWidth(200);
-			enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(544);
-			enquirer_table.getColumnModel().getColumn(2).setPreferredWidth(200);
-			enquirer_table.getColumnModel().getColumn(3).setPreferredWidth(100);
+		JButton register_btn = new JButton("Register");
+		register_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				RegistrationFrame window = new RegistrationFrame(1, 0);
+				window.frmRegister.setVisible(true);
+				enquirerMenuFrame.dispose();
+			}
+		});
+		register_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+		register_btn.setBounds(445, 616, 193, 49);
+		enquirerMenuFrame.getContentPane().add(register_btn);
 
-		}
-
-		catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		enquirer_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+		enquirer_table.getColumnModel().getColumn(1).setPreferredWidth(535);
+		enquirer_table.getColumnModel().getColumn(2).setPreferredWidth(200);
+		enquirer_table.getColumnModel().getColumn(3).setPreferredWidth(109);
 
 		enquirer_table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {

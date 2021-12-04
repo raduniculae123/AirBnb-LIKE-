@@ -36,10 +36,11 @@ public class HostMenuFrame {
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
 	private static final String SQL_QUERY = "SELECT id, shortName, location FROM team002.properties where userID=?";
-	private static final String SQL_QUERY_BOOK = "SELECT count(*) as count FROM team002.bookings WHERE propertyID = ?";
+	private static final String SQL_QUERY_BOOK = "SELECT count(*) as count FROM team002.bookings WHERE propertyID = ? AND status = 0";
 	private static final String SQL_GET_STATUS = "select guest from team002.users where id=?";
 	private static final String SQL_QUERY2 = "SELECT MAX(id) FROM team002.properties";
 	private JTable myProperties_table;
+	private static int[] propertyIdArray = new int[10000];
 
 	/**
 	 * Create the application.
@@ -142,14 +143,14 @@ public class HostMenuFrame {
 		};
 		model.addColumn("Name");
 		model.addColumn("Location");
-		model.addColumn("Number of bookings");
+		model.addColumn("New bookings");
 		try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
 				PreparedStatement stmt = conn.prepareStatement(SQL_QUERY);
 				PreparedStatement stmt2 = conn.prepareStatement(SQL_QUERY_BOOK);)
 
 		{
-
+			int row = 0;
 			stmt.setString(1, String.valueOf(userId));
 			ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
@@ -158,6 +159,8 @@ public class HostMenuFrame {
 				rs2.next();
 				model.addRow(new Object[] { rs.getString("shortName"), rs.getString("location"),
 						rs2.getInt("count")});
+				propertyIdArray[row] = rs.getInt("id");
+				row++;
 			}
 			myProperties_table.setModel(model);
 			myProperties_table.setAutoResizeMode(0);
@@ -175,15 +178,30 @@ public class HostMenuFrame {
 			enquirer_btn.setBounds(754, 30, 255, 45);
 			hostMenuFrame.getContentPane().add(enquirer_btn);
 
-			myProperties_table.getColumnModel().getColumn(0).setPreferredWidth(460);
-			myProperties_table.getColumnModel().getColumn(1).setPreferredWidth(460);
+			myProperties_table.getColumnModel().getColumn(0).setPreferredWidth(451);
+			myProperties_table.getColumnModel().getColumn(1).setPreferredWidth(451);
 			myProperties_table.getColumnModel().getColumn(2).setPreferredWidth(124);
+			myProperties_table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		}
 
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+		
+		myProperties_table.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = myProperties_table.rowAtPoint(evt.getPoint());
+				BookingsFrame window = new BookingsFrame(propertyIdArray[row], userId);
+				window.bookingFrame.setVisible(true);
+				hostMenuFrame.dispose();
+				
+			}
+
+		});
+		
+		
 
 	}
 }

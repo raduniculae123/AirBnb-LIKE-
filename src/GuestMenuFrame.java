@@ -150,6 +150,7 @@ public class GuestMenuFrame {
 			properties_table.getColumnModel().getColumn(1).setPreferredWidth(261);
 			properties_table.getColumnModel().getColumn(2).setPreferredWidth(261);
 			properties_table.getColumnModel().getColumn(3).setPreferredWidth(261);
+			properties_table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		}
 

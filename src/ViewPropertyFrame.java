@@ -31,6 +31,7 @@ public class ViewPropertyFrame {
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
 	private static final String SQL_INSERT = "INSERT INTO team002.bookings (userID, propertyID, startDate, endDate, status) VALUES (?,?,?,?,?)";
+	private static final String SQL_QUERY_SEARCH1 = "SELECT id from team002.bookings where status=1 AND NOT(((startDate NOT BETWEEN ? AND ? ) AND (endDate NOT BETWEEN ? AND ?) AND((startDate < ? AND endDate <?) OR (startDate > ? AND endDate > ?)))) AND propertyID=? ";
 	private static final String SQL_QUERY_NAME = "SELECT shortName FROM team002.properties where id=?";
 	private static final String SQL_QUERY_FACILITIES = "SELECT id, sleeping, bathing, kitchen, living, utility, outdoors FROM team002.facilities WHERE propertyID=?";
 	private static final String SQL_QUERY_SLEEPINGS = "SELECT id, bedlinen, towels, bedroomNr, bedsNr, sleepers FROM team002.sleepings WHERE facilityID=?";
@@ -116,15 +117,39 @@ public class ViewPropertyFrame {
 									// -----
 									f1.dispose();
 									try (Connection conn1 = DriverManager.getConnection(DB_URL, USER, PASS);
-
+											PreparedStatement stmt0 = conn1.prepareStatement(SQL_QUERY_SEARCH1);
 											PreparedStatement stmt1 = conn1.prepareStatement(SQL_INSERT);) {
-										stmt1.setString(1, String.valueOf(userID));
-										stmt1.setString(2, String.valueOf(propertyID));
-										stmt1.setString(3, startDate);
-										stmt1.setString(4, endDate);
-										stmt1.setString(5, String.valueOf(0));
 
-										stmt1.executeUpdate();
+										stmt0.setString(1, startDate);
+										stmt0.setString(2, endDate);
+										stmt0.setString(3, startDate);
+										stmt0.setString(4, endDate);
+										stmt0.setString(5, startDate);
+										stmt0.setString(6, startDate);
+										stmt0.setString(7, endDate);
+										stmt0.setString(8, endDate);
+										stmt0.setString(9, String.valueOf(propertyID));
+										ResultSet rs0 = stmt0.executeQuery();
+
+										if (rs0.next()) {
+											JOptionPane.showMessageDialog(null, "Unavailable Date");
+											System.out.println(rs0.getString("propertyID"));
+										} else {
+											stmt1.setString(1, String.valueOf(userID));
+											stmt1.setString(2, String.valueOf(propertyID));
+											stmt1.setString(3, startDate);
+											stmt1.setString(4, endDate);
+											stmt1.setString(5, String.valueOf(0));
+
+											stmt1.executeUpdate();
+
+											System.out.println("start date " + startDate + "   end date " + endDate);
+											frmViewProperty.dispose();
+											GuestMenuFrame window = new GuestMenuFrame(userID);
+											window.guestMenuframe.setVisible(true);
+											JOptionPane.showMessageDialog(null, "Book request submited");
+										}
+
 									}
 
 									catch (SQLException e1) {
@@ -132,11 +157,6 @@ public class ViewPropertyFrame {
 										e1.printStackTrace();
 									}
 
-									System.out.println("start date " + startDate + "   end date " + endDate);
-									frmViewProperty.dispose();
-									GuestMenuFrame window = new GuestMenuFrame(userID);
-									window.guestMenuframe.setVisible(true);
-									JOptionPane.showMessageDialog(null, "Book request submited");
 								}
 							});
 						}
