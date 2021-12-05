@@ -17,6 +17,11 @@ import java.sql.SQLException;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.chrono.ChronoLocalDate;
 
 public class GuestMenuFrame {
 
@@ -28,8 +33,11 @@ public class GuestMenuFrame {
 	private static final String SQL_QUERY = "SELECT propertyID, startDate, endDate, status FROM team002.bookings where userID=?";
 	private static final String SQL_QUERY2 = "SELECT shortName FROM team002.properties where id=?";
 	private static final String SQL_GET_STATUS = "select host from team002.users where id=?";
+	private static final String SQL_GET_NAME = "select title, surname from team002.users where id=?";
 	private JButton host_btn;
 	private JButton enquirer_btn;
+	private static Date todayDate;
+	private static int[] propertyIdArray = new int[10000];
 
 	/**
 	 * Create the application.
@@ -99,6 +107,7 @@ public class GuestMenuFrame {
 				return false;
 			}
 		};
+		model.addColumn("Host name");
 		model.addColumn("Property name");
 		model.addColumn("Start date");
 		model.addColumn("End date");
@@ -110,30 +119,45 @@ public class GuestMenuFrame {
 				// team002.bookings where userID=?";
 				// SQL_QUERY2 = "SELECT shortName FROM team002.properties where id=?";
 				PreparedStatement stmt = conn.prepareStatement(SQL_QUERY);
-				PreparedStatement stmt2 = conn.prepareStatement(SQL_QUERY2);) {
+				PreparedStatement stmt2 = conn.prepareStatement(SQL_QUERY2);
+				PreparedStatement stmt3 = conn.prepareStatement(SQL_GET_NAME);) {
 
+			int row = 0;
 			stmt.setString(1, String.valueOf(userId));
 			ResultSet rs = stmt.executeQuery();
+
+			String name = "";
+			stmt3.setString(1, String.valueOf(userId));
+			ResultSet rs3 = stmt3.executeQuery();
+			if (rs3.next()) {
+				name = rs3.getString("title") + rs3.getString("surname");
+			}
 			while (rs.next()) {
 				stmt2.setString(1, rs.getString("propertyID"));
 				ResultSet rs2 = stmt2.executeQuery();
 				if (rs2.next()) {
 					if (rs.getInt("status") == 0) {
-						model.addRow(new Object[] { rs2.getString("shortName"), rs.getString("startDate"),
+						model.addRow(new Object[] { name, rs2.getString("shortName"), rs.getString("startDate"),
 								rs.getString("endDate"), "Pending" });
+						propertyIdArray[row] = rs.getInt("propertyID");
+						row++;
 					} else if (rs.getInt("status") == 1) {
-						model.addRow(new Object[] { rs2.getString("shortName"), rs.getString("startDate"),
+						model.addRow(new Object[] { name, rs2.getString("shortName"), rs.getString("startDate"),
 								rs.getString("endDate"), "Accepted" });
+						propertyIdArray[row] = rs.getInt("propertyID");
+						row++;
 					} else if (rs.getInt("status") == 2) {
-						model.addRow(new Object[] { rs2.getString("shortName"), rs.getString("startDate"),
+						model.addRow(new Object[] { name, rs2.getString("shortName"), rs.getString("startDate"),
 								rs.getString("endDate"), "Rejected" });
+						propertyIdArray[row] = rs.getInt("propertyID");
+						row++;
 					}
 				}
 			}
 			properties_table.setModel(model);
 			properties_table.setAutoResizeMode(0);
 			properties_table.setRowHeight(26);
-			
+
 			enquirer_btn = new JButton("Enquirer menu");
 			enquirer_btn.addActionListener(new ActionListener() {
 				public void actionPerformed(ActionEvent e) {
@@ -146,10 +170,11 @@ public class GuestMenuFrame {
 			enquirer_btn.setBounds(799, 30, 255, 45);
 			guestMenuframe.getContentPane().add(enquirer_btn);
 
-			properties_table.getColumnModel().getColumn(0).setPreferredWidth(261);
-			properties_table.getColumnModel().getColumn(1).setPreferredWidth(261);
-			properties_table.getColumnModel().getColumn(2).setPreferredWidth(261);
-			properties_table.getColumnModel().getColumn(3).setPreferredWidth(261);
+			properties_table.getColumnModel().getColumn(0).setPreferredWidth(200);
+			properties_table.getColumnModel().getColumn(1).setPreferredWidth(211);
+			properties_table.getColumnModel().getColumn(2).setPreferredWidth(211);
+			properties_table.getColumnModel().getColumn(3).setPreferredWidth(211);
+			properties_table.getColumnModel().getColumn(4).setPreferredWidth(211);
 			properties_table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		}
@@ -157,6 +182,38 @@ public class GuestMenuFrame {
 		catch (SQLException e1) {
 			e1.printStackTrace();
 		}
+
+		try {
+			todayDate = new SimpleDateFormat("dd-MM-yyyy").parse(java.time.LocalDate.now().toString());
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		properties_table.addMouseListener(new java.awt.event.MouseAdapter() {
+			@Override
+			public void mouseClicked(java.awt.event.MouseEvent evt) {
+				int row = properties_table.rowAtPoint(evt.getPoint());
+				int isBooked = 0;
+				Date endDate;
+				try {
+					endDate = new SimpleDateFormat("dd-MM-yyyy")
+							.parse(properties_table.getModel().getValueAt(row, 3).toString());
+					if (properties_table.getModel().getValueAt(row, 4).toString().equals("Accepted")
+							&& todayDate.before(endDate)) {
+						isBooked = 1;
+					}
+					ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row], 2, userId, isBooked);
+					window.frmViewProperty.setVisible(true);
+					guestMenuframe.dispose();
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+			}
+
+		});
 
 	}
 }

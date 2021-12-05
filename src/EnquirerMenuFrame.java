@@ -290,7 +290,7 @@ public class EnquirerMenuFrame {
 		enquirer_table.addMouseListener(new java.awt.event.MouseAdapter() {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				int row = enquirer_table.rowAtPoint(e.getPoint());
-				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row], 0, 0);
+				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row], 0, 0, 0);
 				window.frmViewProperty.setVisible(true);
 				enquirerMenuFrame.dispose();
 			}

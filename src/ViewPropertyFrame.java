@@ -45,37 +45,22 @@ public class ViewPropertyFrame {
 	JFrame frmViewProperty;
 
 	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					ViewPropertyFrame window = new ViewPropertyFrame(23, 0, 0);
-					window.frmViewProperty.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
-
-	/**
 	 * Create the application.
 	 */
-	public ViewPropertyFrame(int propertyID, int fromWhere, int userID) {
-		initialize(propertyID, fromWhere, userID);
+	public ViewPropertyFrame(int propertyID, int fromWhere, int userID, int isBooked) {
+		initialize(propertyID, fromWhere, userID, isBooked);
 	}
 
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize(int propertyID, int fromWhere, int userID) {
+	private void initialize(int propertyID, int fromWhere, int userID, int isBooked) {
 		frmViewProperty = new JFrame();
 		frmViewProperty.getContentPane().setBackground(Color.ORANGE);
 		frmViewProperty.getContentPane().setLayout(null);
 
 		JButton book_btn = new JButton("BOOK");
+		book_btn.setEnabled(false);
 		book_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (fromWhere == 0) {
@@ -168,6 +153,11 @@ public class ViewPropertyFrame {
 		book_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
 		book_btn.setBounds(66, 35, 144, 48);
 		frmViewProperty.getContentPane().add(book_btn);
+		if (fromWhere == 2) {
+			book_btn.setEnabled(false);
+		} else {
+			book_btn.setEnabled(true);
+		}
 
 		JButton back_btn = new JButton("BACK");
 		back_btn.addActionListener(new ActionListener() {
@@ -187,6 +177,24 @@ public class ViewPropertyFrame {
 		back_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
 		back_btn.setBounds(857, 35, 144, 48);
 		frmViewProperty.getContentPane().add(back_btn);
+		
+		JButton viewInfo_btn = new JButton("View informations");
+		viewInfo_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				PrivateInfoFrame window = new PrivateInfoFrame(propertyID, fromWhere, userID, isBooked);
+				window.privateFrame.setVisible(true);
+				frmViewProperty.dispose();
+			}
+		});
+		viewInfo_btn.setEnabled(false);
+		viewInfo_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+		viewInfo_btn.setBounds(380, 35, 297, 48);
+		frmViewProperty.getContentPane().add(viewInfo_btn);
+		if (fromWhere == 1) {
+			back_btn.setEnabled(false);
+		} else {
+			back_btn.setEnabled(true);
+		}
 
 		frmViewProperty.setBounds(100, 100, 1080, 720);
 		frmViewProperty.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -483,6 +491,10 @@ public class ViewPropertyFrame {
 
 		} catch (SQLException e1) {
 			e1.printStackTrace();
+		}
+		
+		if(isBooked == 1) {
+			viewInfo_btn.setEnabled(true);
 		}
 
 	}

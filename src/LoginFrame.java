@@ -121,7 +121,7 @@ public class LoginFrame {
 										if (rs3.next()) {
 											int userId = ((Number) rs3.getObject(1)).intValue();
 											if (fromWhere == 0) {
-												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId);
+												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId, 0);
 												window2.frmViewProperty.setVisible(true);
 											} else {
 												HostMenuFrame window = new HostMenuFrame(userId);
@@ -139,7 +139,7 @@ public class LoginFrame {
 											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
 											if (fromWhere == 0) {
-												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId);
+												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId, 0);
 												window2.frmViewProperty.setVisible(true);
 											} else {
 												GuestMenuFrame window = new GuestMenuFrame(userId);
