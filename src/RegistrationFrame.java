@@ -44,7 +44,7 @@ public class RegistrationFrame {
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
-	private static final String SQL_INSERT = "INSERT INTO team002.users (title,forename,surname,email,password,mobilenumber,guest,host,house,postcode) VALUES (?,?,?,?,?,?,?,?,?,?)";
+	private static final String SQL_INSERT = "INSERT INTO team002.users (title,forename,surname,email,password,mobilenumber,guest,host,house,postcode,salt) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String SQL_INSERT2 = "INSERT INTO team002.addresses (house,postcode,street,place,isProperty) VALUES (?,?,?,?,?)";
 	private JTextField house_txtField;
 	private JTextField street_txtField;
@@ -58,7 +58,7 @@ public class RegistrationFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistrationFrame window = new RegistrationFrame();
+					RegistrationFrame window = new RegistrationFrame(1, 0);
 					window.frmRegister.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -70,8 +70,8 @@ public class RegistrationFrame {
 	/**
 	 * Create the application.
 	 */
-	public RegistrationFrame() {
-		initialize();
+	public RegistrationFrame(int fromWhere, int properyID) {
+		initialize(fromWhere, properyID);
 	}
 
 	public String get_prop() {
@@ -81,7 +81,7 @@ public class RegistrationFrame {
 	/**
 	 * Initialize the contents of the frame.
 	 */
-	private void initialize() {
+	private void initialize(int fromWhere, int properyID) {
 		frmRegister = new JFrame();
 		frmRegister.setTitle("Register");
 		frmRegister.getContentPane().setBackground(Color.ORANGE);
@@ -118,16 +118,22 @@ public class RegistrationFrame {
 						PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
 						PreparedStatement stmt2 = conn.prepareStatement(SQL_INSERT2, Statement.RETURN_GENERATED_KEYS);) {
 					printVar();
+					String password = String.valueOf(password_txtField.getPassword());
+					System.out.println(password);
+					byte[] salt = HashAndSQLTest.salt();
+					String hashpassword = HashAndSQLTest.hashGeneration(password, salt);
+					System.out.println(hashpassword);
 					stmt.setString(1, title_txtField.getText());
 					stmt.setString(2, forename_txtField.getText());
 					stmt.setString(3, surname_txtField.getText());
 					stmt.setString(4, email_txtField.getText());
-					stmt.setString(5, new String(password_txtField.getPassword()));
+					stmt.setString(5, hashpassword);
 					stmt.setString(6, mobileNumber_txtField.getText());
 					stmt.setString(7, isGuestString);
 					stmt.setString(8, isHostString);
 					stmt.setString(9, house_txtField.getText());
 					stmt.setString(10, postcode_txtField.getText());
+					stmt.setString(11, String.valueOf(salt));
 					stmt.executeUpdate();
 					ResultSet rs = stmt.getGeneratedKeys();
 
@@ -144,7 +150,7 @@ public class RegistrationFrame {
 
 					System.out.println("Inserted record's ID: " + generatedKey);
 					frmRegister.dispose();
-					LoginFrame window = new LoginFrame();
+					LoginFrame window = new LoginFrame(fromWhere, properyID);
 					window.frmLogin.setVisible(true);
 
 				} catch (SQLException e1) {
@@ -227,21 +233,6 @@ public class RegistrationFrame {
 		gbc_register_btn.gridx = 5;
 		gbc_register_btn.gridy = 14;
 		frmRegister.getContentPane().add(register_btn, gbc_register_btn);
-
-		JButton toLogin_btn = new JButton("Already have an account?");
-		toLogin_btn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				frmRegister.dispose();
-				LoginFrame window = new LoginFrame();
-				window.frmLogin.setVisible(true);
-			}
-		});
-		toLogin_btn.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		GridBagConstraints gbc_toLogin_btn = new GridBagConstraints();
-		gbc_toLogin_btn.insets = new Insets(0, 0, 0, 5);
-		gbc_toLogin_btn.gridx = 5;
-		gbc_toLogin_btn.gridy = 15;
-		frmRegister.getContentPane().add(toLogin_btn, gbc_toLogin_btn);
 
 		JLabel title_lbl = new JLabel("Title");
 		title_lbl.setFont(new Font("Tahoma", Font.PLAIN, 30));
@@ -415,6 +406,36 @@ public class RegistrationFrame {
 		gbc_isHost_chkbox.gridx = 5;
 		gbc_isHost_chkbox.gridy = 13;
 		frmRegister.getContentPane().add(isHost_chkbox, gbc_isHost_chkbox);
+		
+				JButton toLogin_btn = new JButton("Already have an account?");
+				toLogin_btn.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						frmRegister.dispose();
+						LoginFrame window = new LoginFrame(1, 0);
+						window.frmLogin.setVisible(true);
+					}
+				});
+				toLogin_btn.setFont(new Font("Tahoma", Font.PLAIN, 20));
+				GridBagConstraints gbc_toLogin_btn = new GridBagConstraints();
+				gbc_toLogin_btn.insets = new Insets(0, 0, 0, 5);
+				gbc_toLogin_btn.gridx = 4;
+				gbc_toLogin_btn.gridy = 15;
+				frmRegister.getContentPane().add(toLogin_btn, gbc_toLogin_btn);
+		
+		JButton enquirer_btn = new JButton("Enquirer menu");
+		enquirer_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmRegister.dispose();
+				EnquirerMenuFrame window = new EnquirerMenuFrame();
+				window.enquirerMenuFrame.setVisible(true);
+			}
+		});
+		enquirer_btn.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_enquirer_btn = new GridBagConstraints();
+		gbc_enquirer_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_enquirer_btn.gridx = 6;
+		gbc_enquirer_btn.gridy = 15;
+		frmRegister.getContentPane().add(enquirer_btn, gbc_enquirer_btn);
 
 		isHost_chkbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {

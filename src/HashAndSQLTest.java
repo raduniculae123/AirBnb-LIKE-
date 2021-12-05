@@ -1,4 +1,4 @@
-package com2008project;
+
 
 
 import java.nio.charset.StandardCharsets;
@@ -13,7 +13,6 @@ public class HashAndSQLTest {
     ///sql password check
     public static String passwordcheck(String password)
     {
-
         String regEx="^[A-Za-z0-9@_]+$";
         String okpassword = " ";
         Pattern p=Pattern.compile(regEx);
@@ -29,7 +28,7 @@ public class HashAndSQLTest {
     }
 
 
-     ///Hash the password
+    ///Hash the password
     public static byte[] salt() {
         SecureRandom sr = new SecureRandom();
         byte[] salt = new byte[16];
@@ -37,28 +36,35 @@ public class HashAndSQLTest {
         return salt;
     }
 
-    public static byte[] hashGeneration(String password, byte[] salt) {
+    public static String hashGeneration(String password, byte[] salt) {
 
-        byte[] hashpassword = null;
+        String hashpassword = null;
         try {
             MessageDigest MD = MessageDigest.getInstance("SHA-512");
             MD.update(salt);
-            hashpassword = MD.digest(password.getBytes(StandardCharsets.UTF_8));
+            byte[] bytes = MD.digest(password.getBytes(StandardCharsets.UTF_8));
+            StringBuilder sb = new StringBuilder();
+            for(int i = 0;i < bytes.length;i++){
+                sb.append(Integer.toString((bytes[i]& 0xff)+0x100, 16).substring(1));
+            }
+            hashpassword = sb.toString();
         } catch (NoSuchAlgorithmException ex) {
             ex.printStackTrace();
-        } finally {
-            return hashpassword;
         }
+        return hashpassword;
     }
 
     public static void main(String[] args) {
-        String password = "123sdjfsc@";
-        String badpassword = "qwe张三%^^(";
-        String email = "qwer@gmail.com";
+
         byte[] salt = HashAndSQLTest.salt();
-        System.out.println(HashAndSQLTest.hashGeneration(password, salt));
-        System.out.println(HashAndSQLTest.passwordcheck(password));
-        System.out.println(HashAndSQLTest.passwordcheck(badpassword));
+        String password = "12345";
+        String password1 = hashGeneration(password, salt);
+        String password2 = hashGeneration(password, salt);
+        System.out.println(" Password 1 -> " + password1);
+        System.out.println(" Password 2 -> " + password2);
+        if (password1.equals(password2)) {
+            System.out.println("passwords are equal");
+        }
 
     }
 
