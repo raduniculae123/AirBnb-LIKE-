@@ -35,7 +35,7 @@ public class LoginFrame {
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
 	private static final String SQL_INSERT = "Select email, password from team002.users where email=? and password=?";
-	private static final String SQL_GET_STATUS = "select host from team002.users where email=?";
+	private static final String SQL_GET_STATUS = "select host, guest from team002.users where email=?";
 	private static final String SQL_GET_ID = "select id from team002.users where email=?";
 	private JButton enquirer_btn;
 
@@ -78,7 +78,8 @@ public class LoginFrame {
 		gridBagLayout.rowHeights = new int[] { 50, 130, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0, 0.0,
 				0.0, 0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				Double.MIN_VALUE };
 		frmLogin.getContentPane().setLayout(gridBagLayout);
 
 		login_lbl = new JLabel("Log in");
@@ -110,8 +111,9 @@ public class LoginFrame {
 							stmt2.setString(1, email_txtField.getText());
 							ResultSet rs2 = stmt2.executeQuery();
 							if (rs2.next()) {
-								int isHost = ((Number) rs2.getObject(1)).intValue();
-								if (isHost == 1) {
+								int isHost = rs2.getInt("host");
+								int isGuest = rs2.getInt("guest");
+								if (isHost == 1 && isGuest == 1) {
 									PreparedStatement stmt3 = conn.prepareStatement(SQL_GET_ID);
 									{
 										stmt3.setString(1, email_txtField.getText());
@@ -128,7 +130,7 @@ public class LoginFrame {
 											frmLogin.dispose();
 										}
 									}
-								} else {
+								} else if (isGuest == 1) {
 									PreparedStatement stmt3 = conn.prepareStatement(SQL_GET_ID);
 									{
 										stmt3.setString(1, email_txtField.getText());
@@ -146,7 +148,21 @@ public class LoginFrame {
 											frmLogin.dispose();
 										}
 									}
+								} else if (isGuest == 0) {
+									PreparedStatement stmt3 = conn.prepareStatement(SQL_GET_ID);
+									{
+										stmt3.setString(1, email_txtField.getText());
+										ResultSet rs3 = stmt3.executeQuery();
+										if (rs3.next()) {
+											System.out.println("elo");
+											int userId = ((Number) rs3.getObject(1)).intValue();
+											HostMenuFrame window = new HostMenuFrame(userId);
+											window.hostMenuFrame.setVisible(true);
+											frmLogin.dispose();
+										}
+									}
 								}
+
 							}
 						}
 
@@ -235,7 +251,7 @@ public class LoginFrame {
 		gbc_toRegister_btn.gridx = 6;
 		gbc_toRegister_btn.gridy = 8;
 		frmLogin.getContentPane().add(toRegister_btn, gbc_toRegister_btn);
-		
+
 		enquirer_btn = new JButton("Enquirer menu");
 		enquirer_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {

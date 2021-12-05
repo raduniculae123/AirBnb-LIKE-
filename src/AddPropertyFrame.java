@@ -1,5 +1,4 @@
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -32,7 +31,7 @@ public class AddPropertyFrame {
 	JFrame frmAddProperty;
 	private JTextField propertyName_txtField;
 	private JLabel description_lbl;
-	private JTextArea description_txtField;
+	private JTextArea description_txtArea;
 	private JLabel propertyName_lbl_3;
 	private JLabel address_lbl;
 	private JTextField location_txtField;
@@ -40,6 +39,9 @@ public class AddPropertyFrame {
 	private int userId, propertyId;
 
 	private int generatedKey = 0;
+
+	private static int isAddress = 0;
+	private static int isCharge = 0;
 
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
@@ -56,9 +58,6 @@ public class AddPropertyFrame {
 	private JLabel changeBands_lbl;
 	private JButton addChangeBands_btn;
 	private JScrollPane scrollPane;
-
-	
-
 
 	public AddPropertyFrame(int propertyId, int userId) {
 		System.out.println("propid=" + propertyId + "  userId=" + userId);
@@ -85,18 +84,25 @@ public class AddPropertyFrame {
 		frmAddProperty.getContentPane().add(addProperty_lbl);
 
 		JLabel propertyName_lbl = new JLabel("Property's name:");
-		propertyName_lbl.setBounds(147, 129, 185, 31);
+		propertyName_lbl.setBounds(147, 129, 199, 31);
 		propertyName_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(propertyName_lbl);
-		
+
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(430, 170, 309, 83);
 		frmAddProperty.getContentPane().add(scrollPane);
 
-		JTextArea description_txtField_1 = new JTextArea();
-		scrollPane.setViewportView(description_txtField_1);
-		
-		
+		JTextArea description_txtArea = new JTextArea();
+		scrollPane.setViewportView(description_txtArea);
+		description_txtArea.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				if (areAllCompleted())
+					next_btn.setEnabled(true);
+				else
+					next_btn.setEnabled(false);
+			}
+		});
+
 		propertyName_txtField = new JTextField();
 		propertyName_txtField.setBounds(430, 129, 309, 31);
 		propertyName_txtField.setFont(new Font("Tahoma", Font.PLAIN, 20));
@@ -112,20 +118,12 @@ public class AddPropertyFrame {
 		});
 
 		description_lbl = new JLabel("Description:");
-		description_lbl.setBounds(147, 195, 130, 30);
+		description_lbl.setBounds(147, 195, 141, 30);
 		description_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(description_lbl);
-		description_txtField_1.addKeyListener(new KeyAdapter() {
-			public void keyReleased(KeyEvent e) {
-				if (areAllCompleted())
-					next_btn.setEnabled(true);
-				else
-					next_btn.setEnabled(false);
-			}
-		});
 
 		propertyName_lbl_3 = new JLabel("Location (area):");
-		propertyName_lbl_3.setBounds(147, 263, 174, 31);
+		propertyName_lbl_3.setBounds(147, 263, 185, 31);
 		propertyName_lbl_3.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(propertyName_lbl_3);
 
@@ -144,7 +142,7 @@ public class AddPropertyFrame {
 		});
 
 		address_lbl = new JLabel("Address:");
-		address_lbl.setBounds(147, 337, 95, 31);
+		address_lbl.setBounds(147, 337, 102, 31);
 		address_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(address_lbl);
 
@@ -158,12 +156,18 @@ public class AddPropertyFrame {
 				window.addAdressFrame.setVisible(true);
 				addFacilities_btn.setEnabled(true);
 				addChangeBands_btn.setEnabled(true);
+				isAddress = 1;
+				if (areAllCompleted())
+					next_btn.setEnabled(true);
+				else
+					next_btn.setEnabled(false);
+				System.out.println("add " + isAddress);
 			}
 		});
 		frmAddProperty.getContentPane().add(addAddress_btn);
 
 		facilities_lbl = new JLabel("Facilities: ");
-		facilities_lbl.setBounds(147, 411, 108, 31);
+		facilities_lbl.setBounds(147, 411, 111, 31);
 		facilities_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(facilities_lbl);
 
@@ -202,12 +206,12 @@ public class AddPropertyFrame {
 					}
 					System.out.println("prop id din : " + propertyId);
 					stmt.setString(1, propertyName_txtField.getText());
-					stmt.setString(2, description_txtField_1.getText());
+					stmt.setString(2, description_txtArea.getText());
 					stmt.setString(3, location_txtField.getText());
 					stmt.setString(4, isBreakfastString);
 					stmt.setString(5, house);
 					stmt.setString(6, postcode);
-					
+
 					stmt.executeUpdate();
 					ResultSet rs = stmt.getGeneratedKeys();
 
@@ -226,10 +230,10 @@ public class AddPropertyFrame {
 			}
 		});
 		changeBands_lbl = new JLabel("Change bands:");
-		changeBands_lbl.setBounds(147, 455, 163, 31);
+		changeBands_lbl.setBounds(147, 455, 172, 31);
 		changeBands_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(changeBands_lbl);
-		
+
 		addChangeBands_btn = new JButton("Add change bands");
 		addChangeBands_btn.setBounds(451, 451, 267, 39);
 		addChangeBands_btn.setEnabled(false);
@@ -237,37 +241,37 @@ public class AddPropertyFrame {
 			public void actionPerformed(ActionEvent e) {
 				AddChargeBandsFrame window = new AddChargeBandsFrame(propertyId);
 				window.frmAddChargeBands.setVisible(true);
+				isCharge = 1;
+				if (areAllCompleted())
+					next_btn.setEnabled(true);
+				else
+					next_btn.setEnabled(false);
+				System.out.println("charge " + isCharge);
 			}
 		});
 		addChangeBands_btn.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(addChangeBands_btn);
 
-				
-				isBreakfast_chkbox = new JCheckBox("Breakfast included:  ");
-				isBreakfast_chkbox.setBounds(147, 502, 249, 39);
-				isBreakfast_chkbox.setHorizontalTextPosition(SwingConstants.LEFT);
-				isBreakfast_chkbox.setFont(new Font("Tahoma", Font.PLAIN, 25));
-				isBreakfast_chkbox.setBackground(Color.ORANGE);
-				frmAddProperty.getContentPane().add(isBreakfast_chkbox);
-		
-				
+		isBreakfast_chkbox = new JCheckBox("Breakfast included:  ");
+		isBreakfast_chkbox.setBounds(147, 502, 275, 39);
+		isBreakfast_chkbox.setHorizontalTextPosition(SwingConstants.LEFT);
+		isBreakfast_chkbox.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		isBreakfast_chkbox.setBackground(Color.ORANGE);
+		frmAddProperty.getContentPane().add(isBreakfast_chkbox);
+
 		next_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
 		frmAddProperty.getContentPane().add(next_btn);
-		
-		
-		
 
 	}
 
 	private boolean areAllCompleted() {
 		boolean ok = false;
-		if (propertyName_txtField.getText().length() == 0 || description_txtField.getText().length() == 0
-				|| location_txtField.getText().length() == 0) {
-			ok = false;
-		} else {
-			ok = true;
-		}
-
+			if (propertyName_txtField.getText().length() == 0 || location_txtField.getText().length() == 0
+					|| isAddress == 0 || isCharge == 0) {
+				ok = false;
+			} else {
+				ok = true;
+			}
 		return ok;
 	}
 }
