@@ -51,21 +51,7 @@ public class RegistrationFrame {
 	private JTextField place_txtField;
 	private JTextField postcode_txtField;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					RegistrationFrame window = new RegistrationFrame(1, 0);
-					window.frmRegister.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the application.

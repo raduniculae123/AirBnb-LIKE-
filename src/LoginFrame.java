@@ -40,21 +40,7 @@ public class LoginFrame {
 	private static final String SQL_GET_SALT = "select salt from team002.users where email=?";
 	private JButton enquirer_btn;
 
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					LoginFrame window = new LoginFrame(1, 0);
-					window.frmLogin.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	
 
 	/**
 	 * Create the application.

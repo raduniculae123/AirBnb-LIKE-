@@ -1,5 +1,4 @@
 
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -66,8 +65,7 @@ public class DatePicker {
 	public void displayDate() {
 		for (int x = 7; x < button.length; x++)
 			button[x].setText("");
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-				"MMMM yyyy");
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("MMMM yyyy");
 		java.util.Calendar cal = java.util.Calendar.getInstance();
 		cal.set(year, month, 1);
 		int dayOfWeek = cal.get(java.util.Calendar.DAY_OF_WEEK);
@@ -81,31 +79,10 @@ public class DatePicker {
 	public String setPickedDate() {
 		if (day.equals(""))
 			return day;
-		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat(
-				"yyyy-MM-dd");
+		java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
 		java.util.Calendar cal = java.util.Calendar.getInstance();
 		cal.set(year, month, Integer.parseInt(day));
 		return sdf.format(cal.getTime());
 	}
-	
-	public static void main(String[] args) {
-		JLabel label = new JLabel("Selected Date:");
-		final JTextField text = new JTextField(20);
-		JButton b = new JButton("popup");
-		JPanel p = new JPanel();
-		p.add(label);
-		p.add(text);
-		p.add(b);
-		final JFrame f = new JFrame();
-		f.getContentPane().add(p);
-		f.pack();
-		f.setVisible(true);
-		b.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent ae) {
-				text.setText(new DatePicker(f).setPickedDate());
-			}
-		});
-	}
+
 }
-
-
