@@ -45,6 +45,7 @@ public class RegistrationFrame {
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
+	private static final String SQL_EMAIL = "SELECT id from team002.users WHERE email = ?";
 	private static final String SQL_INSERT = "INSERT INTO team002.users (title,forename,surname,email,password,mobilenumber,guest,host,house,postcode,salt) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String SQL_INSERT2 = "INSERT INTO team002.addresses (house,postcode,street,place,isProperty) VALUES (?,?,?,?,?)";
 	private static final String SQL_GET = "SELECT salt FROM team002.users where id = (SELECT max(id) FROM team002.users)";
@@ -96,73 +97,79 @@ public class RegistrationFrame {
 		register_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
-				if (Validators.isEmailValid(email_txtField.getText())
-						&& Validators.isPasswordValid(password_txtField.getText())) {
+				try (Connection conn4 = DriverManager.getConnection(DB_URL, USER, PASS);
 
-					String isGuestString = String.valueOf(isGuest_chkbox.isSelected() ? 1 : 0);
-					String isHostString = String.valueOf(isHost_chkbox.isSelected() ? 1 : 0);
+						PreparedStatement stmt4 = conn4.prepareStatement(SQL_EMAIL);) {
 
-					try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
+					stmt4.setString(1, email_txtField.getText());
+					ResultSet rs4 = stmt4.executeQuery();
+					if (rs4.next()) {
+						JOptionPane.showMessageDialog(null, "Email already registered");
+					} else {
+						if (Validators.isEmailValid(email_txtField.getText())
+								&& Validators.isPasswordValid(password_txtField.getText())) {
 
-							PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-							PreparedStatement stmt2 = conn.prepareStatement(SQL_INSERT2,
-									Statement.RETURN_GENERATED_KEYS);
-							PreparedStatement stmt3 = conn.prepareStatement(SQL_GET,
-									Statement.RETURN_GENERATED_KEYS);) {
-						printVar();
+							String isGuestString = String.valueOf(isGuest_chkbox.isSelected() ? 1 : 0);
+							String isHostString = String.valueOf(isHost_chkbox.isSelected() ? 1 : 0);
 
-						String password = String.valueOf(password_txtField.getPassword());
-						System.out.println(password);
-						byte[] salt = HashAndSQLTest.salt();
-						System.out.println("saltinreg: " + new String(salt));
-						String hashpassword = HashAndSQLTest.hashGeneration(password, salt);
-						System.out.println(hashpassword);
-						stmt.setString(1, title_txtField.getText());
-						stmt.setString(2, forename_txtField.getText());
-						stmt.setString(3, surname_txtField.getText());
-						stmt.setString(4, email_txtField.getText());
-						stmt.setString(5, hashpassword);
-						stmt.setString(6, mobileNumber_txtField.getText());
-						stmt.setString(7, isGuestString);
-						stmt.setString(8, isHostString);
-						stmt.setString(9, house_txtField.getText());
-						stmt.setString(10, postcode_txtField.getText());
-						stmt.setString(11, new String(salt));
-						stmt.executeUpdate();
+							try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
-						stmt3.executeQuery();
-						ResultSet rs3 = stmt3.executeQuery();
-						;
-						System.out.println("cristos");
-						if (rs3.next()) {
-							System.out.println("verif" + rs3.getString("salt"));
+									PreparedStatement stmt = conn.prepareStatement(SQL_INSERT,
+											Statement.RETURN_GENERATED_KEYS);
+									PreparedStatement stmt2 = conn.prepareStatement(SQL_INSERT2,
+											Statement.RETURN_GENERATED_KEYS);
+									PreparedStatement stmt3 = conn.prepareStatement(SQL_GET,
+											Statement.RETURN_GENERATED_KEYS);) {
+
+								String password = String.valueOf(password_txtField.getPassword());
+								byte[] salt = HashAndSQLTest.salt();
+								String hashpassword = HashAndSQLTest.hashGeneration(password, salt);
+								stmt.setString(1, title_txtField.getText());
+								stmt.setString(2, forename_txtField.getText());
+								stmt.setString(3, surname_txtField.getText());
+								stmt.setString(4, email_txtField.getText());
+								stmt.setString(5, hashpassword);
+								stmt.setString(6, mobileNumber_txtField.getText());
+								stmt.setString(7, isGuestString);
+								stmt.setString(8, isHostString);
+								stmt.setString(9, house_txtField.getText());
+								stmt.setString(10, postcode_txtField.getText());
+								stmt.setString(11, new String(salt));
+								stmt.executeUpdate();
+
+								ResultSet rs = stmt.getGeneratedKeys();
+
+								stmt2.setString(1, house_txtField.getText());
+								stmt2.setString(2, postcode_txtField.getText());
+								stmt2.setString(3, street_txtField.getText());
+								stmt2.setString(4, place_txtField.getText());
+								stmt2.setString(5, "0");
+								stmt2.executeUpdate();
+
+								if (rs.next()) {
+									generatedKey = rs.getInt(1);
+								}
+
+								System.out.println("Inserted record's ID: " + generatedKey);
+								frmRegister.dispose();
+								LoginFrame window = new LoginFrame(fromWhere, properyID);
+								window.frmLogin.setVisible(true);
+
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+
+						} else {
+							JOptionPane.showMessageDialog(null,
+									"Email must be valid. Password must contain at least 8 character (both capital and small letters)");
 						}
-						ResultSet rs = stmt.getGeneratedKeys();
-
-						stmt2.setString(1, house_txtField.getText());
-						stmt2.setString(2, postcode_txtField.getText());
-						stmt2.setString(3, street_txtField.getText());
-						stmt2.setString(4, place_txtField.getText());
-						stmt2.setString(5, "0");
-						stmt2.executeUpdate();
-
-						if (rs.next()) {
-							generatedKey = rs.getInt(1);
-						}
-
-						System.out.println("Inserted record's ID: " + generatedKey);
-						frmRegister.dispose();
-						LoginFrame window = new LoginFrame(fromWhere, properyID);
-						window.frmLogin.setVisible(true);
-
-					} catch (SQLException e1) {
-						e1.printStackTrace();
 					}
 
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
 				}
-				else {
-					JOptionPane.showMessageDialog(null, "Email must be valid. Password must contain at least 8 character (both capital and small letters) and one special character");
-				}
+
 			}
 		});
 
@@ -477,17 +484,6 @@ public class RegistrationFrame {
 		}
 
 		return ok;
-	}
-
-	private void printVar() {
-		System.out.println(title_txtField.getText());
-		System.out.println(email_txtField.getText());
-		System.out.println(password_txtField.getPassword());
-		System.out.println(mobileNumber_txtField.getText());
-		System.out.println(forename_txtField.getText());
-		System.out.println(surname_txtField.getText());
-		System.out.println(isGuest_chkbox.isSelected());
-		System.out.println(isHost_chkbox.isSelected());
 	}
 
 }

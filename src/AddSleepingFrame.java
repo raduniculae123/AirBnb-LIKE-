@@ -45,7 +45,6 @@ public class AddSleepingFrame {
 	 * @param propertyId
 	 */
 	private void initialize(int facilityId) {
-		System.out.println("muie din sleeping");
 		frmAddSleeping = new JFrame();
 		frmAddSleeping.getContentPane().setEnabled(false);
 		frmAddSleeping.getContentPane().setBackground(Color.ORANGE);

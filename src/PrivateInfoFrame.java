@@ -112,7 +112,6 @@ public class PrivateInfoFrame {
 			if (rs2.next()) {
 				email_lbl.setText(rs2.getString("email"));
 				mobileNumber_lbl.setText(rs2.getString("mobilenumber"));
-				System.out.println("+++++++++" + rs2.getString("email") + rs2.getString("mobilenumber"));
 			}
 
 		}
