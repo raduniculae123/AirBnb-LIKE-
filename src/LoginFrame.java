@@ -46,7 +46,6 @@ public class LoginFrame {
 	 * Create the application.
 	 */
 	public LoginFrame(int fromWhere, int properyID) {
-		System.out.println("miau");
 		initialize(fromWhere, properyID);
 	}
 
@@ -90,13 +89,10 @@ public class LoginFrame {
 						stmtsalt.setString(1, email_txtField.getText());
 						ResultSet rs4 = stmtsalt.executeQuery();
 						if (rs4.next()) {
-							System.out.println("salt in string" + rs4.getString("salt"));
 							byte[] salt = rs4.getString("salt").getBytes();
-							System.out.println("salt"+new String(salt));//[B@285b1306---[B@2595efc6--[B@13359c68
 							String password = String.valueOf(password_field.getPassword());
 							String okpassword = HashAndSQLTest.passwordcheck(password);
 							String hashpassword = HashAndSQLTest.hashGeneration(okpassword, salt);
-							System.out.println("hash" + hashpassword);
 							stmt.setString(1, email_txtField.getText());
 							stmt.setString(2, String.valueOf(hashpassword));
 						}
@@ -138,7 +134,6 @@ public class LoginFrame {
 										stmt3.setString(1, email_txtField.getText());
 										ResultSet rs3 = stmt3.executeQuery();
 										if (rs3.next()) {
-											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
 											if (fromWhere == 0) {
 												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId, 0);
@@ -156,7 +151,6 @@ public class LoginFrame {
 										stmt3.setString(1, email_txtField.getText());
 										ResultSet rs3 = stmt3.executeQuery();
 										if (rs3.next()) {
-											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
 											HostMenuFrame window = new HostMenuFrame(userId);
 											window.hostMenuFrame.setVisible(true);
@@ -285,8 +279,5 @@ public class LoginFrame {
 		return ok;
 	}
 
-	public void printVar() {
-		System.out.println(email_txtField.getText());
-		System.out.println(password_field.getPassword());
-	}
+	
 }

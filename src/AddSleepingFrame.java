@@ -1,5 +1,4 @@
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -42,7 +41,6 @@ public class AddSleepingFrame {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize(int facilityId) {
-		System.out.println("muie din sleeping");
 		frmAddSleeping = new JFrame();
 		frmAddSleeping.getContentPane().setEnabled(false);
 		frmAddSleeping.getContentPane().setBackground(Color.ORANGE);

@@ -15,9 +15,7 @@ public class HashAndSQLTest {
 		Pattern p = Pattern.compile(regEx);
 		Matcher m = p.matcher(password);
 		if (!m.matches()) {
-			System.out.println("password ' " + password + " ' is Illegal input ");
 		} else {
-			System.out.println(password + " OK!");
 			okpassword = password;
 		}
 		return okpassword;

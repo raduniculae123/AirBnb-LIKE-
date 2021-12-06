@@ -197,7 +197,6 @@ public class BookingsFrame {
 				stmt3.setString(7, rs.getString("endDate"));
 				stmt3.setString(8, rs.getString("endDate"));
 			}
-			System.out.println("update prost");
 			stmt3.executeUpdate();
 			stmt2.setInt(1, 1);
 			stmt2.setInt(2, propertyIdArray[row]);
