@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -22,6 +18,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ *a class for adding the bathing details
+ */
 public class AddBathingFrame {
 
 	protected JFrame frmAddBathing;
@@ -40,6 +39,7 @@ public class AddBathingFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param facilityId
 	 */
 	private void initialize(int facilityId) {
 		frmAddBathing = new JFrame();
@@ -54,6 +54,9 @@ public class AddBathingFrame {
 				Double.MIN_VALUE };
 		frmAddBathing.getContentPane().setLayout(gridBagLayout);
 
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addBathing_lbl = new JLabel("Add Bathing Facilities");
 		addBathing_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addBathing_lbl = new GridBagConstraints();
@@ -99,6 +102,9 @@ public class AddBathingFrame {
 		JButton toAddBathroom_btn = new JButton("Add bathroom");
 		toAddBathroom_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/**
+				 * inserts the contents of the text fields in the database
+				 */
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
 						PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);) {

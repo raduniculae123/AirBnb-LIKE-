@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -21,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ * a class for adding the outdoor details
+ */
 public class AddOutdoorFrame {
 
 	protected JFrame frmAddOutdoor;
@@ -38,6 +37,7 @@ public class AddOutdoorFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param facilityId
 	 */
 	private void initialize(int facilityId) {
 		frmAddOutdoor = new JFrame();
@@ -50,6 +50,9 @@ public class AddOutdoorFrame {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frmAddOutdoor.getContentPane().setLayout(gridBagLayout);
 		
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addOutdoor_lbl = new JLabel("Add Outdoor Facilities");
 		addOutdoor_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addOutdoor_lbl = new GridBagConstraints();
@@ -117,6 +120,9 @@ public class AddOutdoorFrame {
 		
 		JButton submit_btn = new JButton("Submit");
 		submit_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the checkboxes in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 

@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -21,6 +17,9 @@ import javax.swing.JCheckBox;
 import javax.swing.SwingConstants;
 import javax.swing.JButton;
 
+/**
+ * a class for adding the kitchen details
+ */
 public class AddKitchenFrame {
 
 	protected JFrame frmAddKitchen;
@@ -39,6 +38,7 @@ public class AddKitchenFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param facilityId
 	 */
 	private void initialize(int facilityId) {
 		frmAddKitchen = new JFrame();
@@ -51,6 +51,9 @@ public class AddKitchenFrame {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frmAddKitchen.getContentPane().setLayout(gridBagLayout);
 		
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addKitchen_lbl = new JLabel("Add Kitchen Facilities");
 		addKitchen_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addKitchen_lbl = new GridBagConstraints();
@@ -205,6 +208,9 @@ public class AddKitchenFrame {
 		
 		JButton submit_btn = new JButton("Submit");
 		submit_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the checkboxes in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 

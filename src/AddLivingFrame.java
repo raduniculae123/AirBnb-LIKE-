@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -21,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ * a class for adding the living room details
+ */
 public class AddLivingFrame {
 
 	protected JFrame frmAddLiving;
@@ -37,6 +36,7 @@ public class AddLivingFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param facilityId
 	 */
 	private void initialize(int facilityId) {
 		frmAddLiving = new JFrame();
@@ -49,6 +49,10 @@ public class AddLivingFrame {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frmAddLiving.getContentPane().setLayout(gridBagLayout);
 		
+		
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addLiving_lbl = new JLabel("Add Living Facilities");
 		addLiving_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addLiving_lbl = new GridBagConstraints();
@@ -126,6 +130,9 @@ public class AddLivingFrame {
 		
 		JButton submit_btn = new JButton("Submit");
 		submit_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the checkboxes in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 

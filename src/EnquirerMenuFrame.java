@@ -16,15 +16,14 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.awt.Button;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
+/**
+ * a class to display the enquirer menu
+ */
 public class EnquirerMenuFrame {
 
 	JFrame enquirerMenuFrame;
@@ -71,6 +70,9 @@ public class EnquirerMenuFrame {
 		enquirerMenuFrame.getContentPane().setBackground(Color.ORANGE);
 		enquirerMenuFrame.getContentPane().setLayout(null);
 
+		/**
+		 * adding text fields and labels
+		 */
 		JScrollPane scrollPane = new JScrollPane();
 		scrollPane.setBounds(10, 134, 1046, 411);
 		enquirerMenuFrame.getContentPane().add(scrollPane);
@@ -108,6 +110,9 @@ public class EnquirerMenuFrame {
 		enquirerMenuFrame.getContentPane().add(startDate_txtField);
 		startDate_txtField.setColumns(10);
 
+		/**
+		 * selecting the start date
+		 */
 		JButton startDate_btn = new JButton("Start date");
 		startDate_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -141,6 +146,9 @@ public class EnquirerMenuFrame {
 		endDate_txtField.setBounds(896, 47, 146, 36);
 		enquirerMenuFrame.getContentPane().add(endDate_txtField);
 
+		/**
+		 * selecting the end date
+		 */
 		endDate_btn = new JButton("End date");
 		endDate_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -168,6 +176,9 @@ public class EnquirerMenuFrame {
 		endDate_btn.setBounds(896, 10, 146, 36);
 		enquirerMenuFrame.getContentPane().add(endDate_btn);
 
+		/**
+		 * creating table with available properties
+		 */
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -184,6 +195,9 @@ public class EnquirerMenuFrame {
 		model.addColumn("Location");
 		model.addColumn("Breakfast");
 
+		/**
+		 * updating the table based on the user's search
+		 */
 		search_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				int rowNr = 0;

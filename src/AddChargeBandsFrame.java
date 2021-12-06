@@ -1,5 +1,3 @@
-
-import java.awt.EventQueue;
 import java.awt.Color;
 import java.awt.GridBagLayout;
 import java.awt.GridBagConstraints;
@@ -15,6 +13,9 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+/**
+ * a class for adding the charge bands details
+ */
 public class AddChargeBandsFrame {
 
 	protected JFrame frmAddChargeBands;
@@ -44,6 +45,7 @@ public class AddChargeBandsFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param propertyId
 	 */
 	private void initialize(int propertyId) {
 		frmAddChargeBands = new JFrame();
@@ -57,6 +59,9 @@ public class AddChargeBandsFrame {
 				Double.MIN_VALUE };
 		frmAddChargeBands.getContentPane().setLayout(gridBagLayout);
 
+		/**
+		 * adding the text fields and labels
+		 */
 		JLabel addChangeBands_lbl = new JLabel("Add Change Bands");
 		addChangeBands_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addChangeBands_lbl = new GridBagConstraints();
@@ -84,7 +89,10 @@ public class AddChargeBandsFrame {
 		gbc_startDate_txtField.gridy = 3;
 		frmAddChargeBands.getContentPane().add(startDate_txtField, gbc_startDate_txtField);
 		startDate_txtField.setColumns(10);
-
+		
+		/**
+		 * creating a DataPicker object to select the date from a calendar
+		 */
 		startDate_btn = new JButton("Add start date");
 		startDate_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -134,6 +142,9 @@ public class AddChargeBandsFrame {
 		frmAddChargeBands.getContentPane().add(endDate_txtField, gbc_endDate_txtField);
 		endDate_txtField.setColumns(10);
 
+		/**
+		 * creating a DataPicker object to select the date from a calendar
+		 */
 		endDate_btn = new JButton("Add end date");
 		endDate_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -223,6 +234,9 @@ public class AddChargeBandsFrame {
 		addAnother_btn = new JButton("Add another charge band");
 		addAnother_btn.setEnabled(false);
 		addAnother_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -258,6 +272,9 @@ public class AddChargeBandsFrame {
 		saveChanges_btn = new JButton("Save changes");
 		saveChanges_btn.setEnabled(false);
 		saveChanges_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
@@ -287,7 +304,10 @@ public class AddChargeBandsFrame {
 		frmAddChargeBands.getContentPane().add(saveChanges_btn, gbc_saveChanges_btn);
 		frmAddChargeBands.setBounds(100, 100, 1080, 720);
 		frmAddChargeBands.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+		
+		/**
+		 * buttons are enabled only if all the fields are completed
+		 */
 		startDate_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
 				if (areAllCompleted()) {
@@ -348,7 +368,11 @@ public class AddChargeBandsFrame {
 			}
 		});
 	}
-
+	
+	/**
+	 * checking whether all the fields have been completed
+	 * @return boolean for completion status
+	 */
 	private boolean areAllCompleted() {
 		boolean ok = false;
 		if (startDate_txtField.getText().length() == 0 || endDate_txtField.getText().length() == 0

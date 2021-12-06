@@ -1,7 +1,5 @@
-import java.awt.EventQueue;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -16,11 +14,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.swing.JTable;
-import javax.swing.plaf.ButtonUI;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JScrollPane;
 
+/**
+ * a class for making bookings
+ */
 public class BookingsFrame {
 
 	JFrame bookingFrame;
@@ -45,12 +44,16 @@ public class BookingsFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param propertyID, userID
 	 */
 	private void initialize(int propertyID, int userID) {
 		bookingFrame = new JFrame();
 		bookingFrame.getContentPane().setBackground(Color.ORANGE);
 		bookingFrame.getContentPane().setLayout(null);
 
+		/**
+		 * adding the text fields, table and labels
+		 */
 		JLabel bookings_lbl = new JLabel("");
 		bookings_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		bookings_lbl.setBounds(10, 11, 755, 49);
@@ -66,6 +69,9 @@ public class BookingsFrame {
 		bookingFrame.setBounds(100, 100, 1080, 720);
 		bookingFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+		/**
+		 * adding the data to the booking table
+		 */
 		DefaultTableModel model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
@@ -88,9 +94,6 @@ public class BookingsFrame {
 				PreparedStatement stmt3 = conn.prepareStatement(SQL_QUERY3);)
 
 		{
-			// SQL_QUERY = "SELECT id, userID, startDate, endDate FROM team002.bookings
-			// WHERE propertyID=?";
-			// SQL_QUERY2 = "SELECT title, forename, surname FROM team002.users WHERE id=?";
 			int row = 0;
 			stmt3.setString(1, String.valueOf(propertyID));
 			ResultSet rs3 = stmt3.executeQuery();
@@ -175,6 +178,12 @@ public class BookingsFrame {
 
 	}
 
+	/**
+	 * accept booking method
+	 * @param row
+	 * @param propertyID
+	 * @param userID
+	 */
 	private void acceptBooking(int row, int propertyID, int userID) {
 
 		try (Connection conn2 = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -214,6 +223,12 @@ public class BookingsFrame {
 
 	}
 
+	/**
+	 * decline booking method
+	 * @param row
+	 * @param propertyID
+	 * @param userID
+	 */
 	private void declineBooking(int row, int propertyID, int userID) {
 		try (Connection conn2 = DriverManager.getConnection(DB_URL, USER, PASS);
 

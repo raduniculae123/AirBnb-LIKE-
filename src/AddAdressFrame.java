@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import java.awt.Font;
@@ -14,11 +10,11 @@ import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.awt.event.ActionEvent;
-
+/**
+ *a class for adding the address details
+ */
 public class AddAdressFrame {
 
 	JFrame addAdressFrame;
@@ -30,6 +26,7 @@ public class AddAdressFrame {
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
 	private static final String SQL_INSERT = "INSERT INTO team002.addresses (house,postcode,street,place,isProperty) VALUES (?,?,?,?,?)";
+	
 	private static final String SQL_INIT_INSERT = "INSERT INTO team002.properties (id,userID,house,postcode) values (?,?,?,?)";
 	/**
 	 * Create the application.
@@ -39,7 +36,8 @@ public class AddAdressFrame {
 	}
 
 	/**
-	 * Initialize the contents of the frame.
+	 * Initialize the contents of the frame for the given parameters
+	 * @param isProperty, id, userId
 	 */
 	private void initialize(int isProperty, int id, int userId) {
 		
@@ -49,9 +47,13 @@ public class AddAdressFrame {
 		addAdressFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		addAdressFrame.getContentPane().setLayout(null);
 
+		
 		JButton submit_btn = new JButton("Submit");
 		submit_btn.setEnabled(false);
 		submit_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -86,6 +88,9 @@ public class AddAdressFrame {
 		submit_btn.setBounds(409, 605, 187, 45);
 		addAdressFrame.getContentPane().add(submit_btn);
 
+		/**
+		 * adding the text fields and labels
+		 */
 		JLabel addProperty_lbl = new JLabel("Add Address");
 		addProperty_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		addProperty_lbl.setBounds(378, 0, 327, 87);
@@ -173,6 +178,10 @@ public class AddAdressFrame {
 
 	}
 
+	/**
+	 * checking whether all the fields have been completed
+	 * @return boolean for completion status
+	 */
 	private boolean areAllCompleted() {
 		boolean ok = false;
 		if (house_txtField.getText().length() == 0 || street_txtField.getText().length() == 0

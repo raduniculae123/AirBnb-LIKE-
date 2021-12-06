@@ -1,6 +1,3 @@
-
-
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
@@ -22,6 +19,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ *a class for adding the bathroom details
+ */
 public class AddBathroomFrame {
 	private static int bathrooms;
 	protected JFrame frmAddBathroom;
@@ -39,6 +39,7 @@ public class AddBathroomFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param bathingId
 	 */
 	private void initialize(int bathingId) {
 		frmAddBathroom = new JFrame();
@@ -51,6 +52,9 @@ public class AddBathroomFrame {
 		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		frmAddBathroom.getContentPane().setLayout(gridBagLayout);
 		
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addOutdoor_lbl = new JLabel("Add Bathroom");
 		addOutdoor_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addOutdoor_lbl = new GridBagConstraints();
@@ -107,6 +111,9 @@ public class AddBathroomFrame {
 		
 		JButton addAnotherBathroom_btn = new JButton("Add another bathroom");
 		addAnotherBathroom_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
