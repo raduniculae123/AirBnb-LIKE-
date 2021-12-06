@@ -151,7 +151,7 @@ public class ViewPropertyFrame {
 			}
 		});
 		book_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-		book_btn.setBounds(66, 35, 144, 48);
+		book_btn.setBounds(10, 11, 144, 48);
 		frmViewProperty.getContentPane().add(book_btn);
 		if (fromWhere == 2) {
 			book_btn.setEnabled(false);
@@ -188,7 +188,7 @@ public class ViewPropertyFrame {
 		});
 		viewInfo_btn.setEnabled(false);
 		viewInfo_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-		viewInfo_btn.setBounds(380, 35, 297, 48);
+		viewInfo_btn.setBounds(10, 70, 297, 48);
 		frmViewProperty.getContentPane().add(viewInfo_btn);
 		if (fromWhere == 1) {
 			back_btn.setEnabled(false);

@@ -30,7 +30,7 @@ public class BookingsFrame {
 	private static final String SQL_UPDATE = "UPDATE team002.bookings SET status=? WHERE id = ?";
 	private static final String SQL_UPDATE2 = "UPDATE team002.bookings SET status=2 WHERE (NOT( (startDate NOT BETWEEN ? AND ? ) AND (endDate NOT BETWEEN ? AND ? ) AND((startDate < ? AND endDate < ?) OR (startDate > ? AND endDate > ? ))))";
 	private static final String SQL_QUERY = "SELECT id, userID, startDate, endDate, status FROM team002.bookings WHERE propertyID=? AND status!=2";
-	private static final String SQL_QUERY2 = "SELECT title, forename, surname FROM team002.users WHERE id=?";
+	private static final String SQL_QUERY2 = "SELECT title, forename, surname, email FROM team002.users WHERE id=?";
 	private static final String SQL_QUERY3 = "SELECT shortName FROM team002.properties WHERE id=?";
 	private static final String SQL_QUERY4 = "SELECT startDate, endDate FROM team002.bookings WHERE id=?";
 	private static int[] propertyIdArray = new int[10000];
@@ -76,6 +76,7 @@ public class BookingsFrame {
 		model.addColumn("Title");
 		model.addColumn("Forename");
 		model.addColumn("Surname");
+		model.addColumn("Email");
 		model.addColumn("Start Date");
 		model.addColumn("End Date");
 		model.addColumn("Accept");
@@ -104,15 +105,15 @@ public class BookingsFrame {
 				if (rs2.next()) {
 					if (rs.getInt("status") == 0) {
 						model.addRow(new Object[] { rs2.getString("title"), rs2.getString("forename"),
-								rs2.getString("surname"), rs.getString("startDate"), rs.getString("endDate"), "Accept",
+								rs2.getString("surname"), "Not Available" ,rs.getString("startDate"), rs.getString("endDate"), "Accept",
 								"Decline" });
 					} else if (rs.getInt("status") == 1) {
 						model.addRow(new Object[] { rs2.getString("title"), rs2.getString("forename"),
-								rs2.getString("surname"), rs.getString("startDate"), rs.getString("endDate"),
+								rs2.getString("surname"), rs2.getString("email") ,rs.getString("startDate"), rs.getString("endDate"),
 								"Accepted", "Accepted" });
 					} else if (rs.getInt("status") == 2) {
 						model.addRow(new Object[] { rs2.getString("title"), rs2.getString("forename"),
-								rs2.getString("surname"), rs.getString("startDate"), rs.getString("endDate"),
+								rs2.getString("surname"), "Not Available" , rs.getString("startDate"), rs.getString("endDate"),
 								"Declined", "Declined" });
 					}
 					propertyIdArray[row] = rs.getInt("id");
@@ -136,12 +137,13 @@ public class BookingsFrame {
 			bookingFrame.getContentPane().add(host_btn);
 
 			table.getColumnModel().getColumn(0).setPreferredWidth(80);
-			table.getColumnModel().getColumn(1).setPreferredWidth(328);
-			table.getColumnModel().getColumn(2).setPreferredWidth(315);
-			table.getColumnModel().getColumn(3).setPreferredWidth(85);
+			table.getColumnModel().getColumn(1).setPreferredWidth(196);
+			table.getColumnModel().getColumn(2).setPreferredWidth(196);
+			table.getColumnModel().getColumn(3).setPreferredWidth(250);
 			table.getColumnModel().getColumn(4).setPreferredWidth(85);
-			table.getColumnModel().getColumn(5).setPreferredWidth(80);
+			table.getColumnModel().getColumn(5).setPreferredWidth(85);
 			table.getColumnModel().getColumn(6).setPreferredWidth(80);
+			table.getColumnModel().getColumn(7).setPreferredWidth(80);
 			table.getTableHeader().setFont(new Font("SansSerif", Font.BOLD, 15));
 
 		}
@@ -157,10 +159,12 @@ public class BookingsFrame {
 				int col = table.columnAtPoint(evt.getPoint());
 				if (row >= 0 && col >= 0 && (!(table.getModel().getValueAt(row, col).toString().equals("Accepted"))
 						&& !(table.getModel().getValueAt(row, col).toString().equals("Declined")))) {
-					if (col == 5) {
+					if (col == 6) {
 						acceptBooking(row, propertyID, userID);
-					} else if (col == 6) {
+						System.out.println("coloana accept");
+					} else if (col == 7) {
 						declineBooking(row, propertyID, userID);
+						System.out.println("coloana decline");
 					}
 				} else {
 					System.out.println("conditie gresita");
@@ -193,10 +197,11 @@ public class BookingsFrame {
 				stmt3.setString(7, rs.getString("endDate"));
 				stmt3.setString(8, rs.getString("endDate"));
 			}
+			System.out.println("update prost");
 			stmt3.executeUpdate();
 			stmt2.setInt(1, 1);
 			stmt2.setInt(2, propertyIdArray[row]);
-			System.out.println("acc bookingID" + propertyIdArray[row]);
+			System.out.println("acc bookingID" + propertyIdArray[row] + "set status 1");
 			stmt2.executeUpdate();
 			bookingFrame.dispose();
 			BookingsFrame window = new BookingsFrame(propertyID, userID);
@@ -234,7 +239,7 @@ public class BookingsFrame {
 			stmt3.executeUpdate();
 			stmt2.setInt(1, 2);
 			stmt2.setInt(2, propertyIdArray[row]);
-			System.out.println("acc bookingID" + propertyIdArray[row]);
+			System.out.println("acc bookingID" + propertyIdArray[row] + "set status 2");
 			stmt2.executeUpdate();
 			bookingFrame.dispose();
 			BookingsFrame window = new BookingsFrame(propertyID, userID);

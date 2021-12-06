@@ -238,8 +238,9 @@ public class EnquirerMenuFrame {
 							}
 							model.addRow(new Object[] { rs2.getString("shortName"), rs2.getString("description"),
 									rs2.getString("location"), hasBreakfast });
-							propertyIdArray[rowNr] = rs1.getInt("propertyID");
+							propertyIdArray[rowNr] = rs2.getInt("id");
 							rowNr++;
+							
 
 						}
 					}
@@ -254,6 +255,8 @@ public class EnquirerMenuFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				for(int i=0; i<50; i++)
+					System.out.println(propertyIdArray[i]);
 
 			}
 		});
@@ -291,6 +294,7 @@ public class EnquirerMenuFrame {
 			public void mouseClicked(java.awt.event.MouseEvent e) {
 				int row = enquirer_table.rowAtPoint(e.getPoint());
 				ViewPropertyFrame window = new ViewPropertyFrame(propertyIdArray[row], 0, 0, 0);
+				System.out.println("entered propID " + propertyIdArray[row]);
 				window.frmViewProperty.setVisible(true);
 				enquirerMenuFrame.dispose();
 			}
