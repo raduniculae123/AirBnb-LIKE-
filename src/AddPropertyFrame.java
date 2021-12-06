@@ -26,6 +26,9 @@ import java.awt.event.ActionEvent;
 import javax.swing.JTextArea;
 import javax.swing.JScrollPane;
 
+/**
+ * a class for adding the property details
+ */
 public class AddPropertyFrame {
 
 	JFrame frmAddProperty;
@@ -68,6 +71,7 @@ public class AddPropertyFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param propertyId, userId
 	 */
 	private void initialize(int propertyId, int userId) {
 
@@ -78,6 +82,9 @@ public class AddPropertyFrame {
 		frmAddProperty.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frmAddProperty.getContentPane().setLayout(null);
 
+		/**
+		 * adding the text fields and and labels
+		 */
 		JLabel addProperty_lbl = new JLabel("Add Property");
 		addProperty_lbl.setBounds(469, 43, 231, 49);
 		addProperty_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
@@ -146,6 +153,9 @@ public class AddPropertyFrame {
 		address_lbl.setFont(new Font("Tahoma", Font.PLAIN, 25));
 		frmAddProperty.getContentPane().add(address_lbl);
 
+		/**
+		 * adding address in a new window
+		 */
 		addAddress_btn = new JButton("Add address");
 		addAddress_btn.setBounds(469, 333, 231, 39);
 		addAddress_btn.setFont(new Font("Tahoma", Font.PLAIN, 25));
@@ -187,6 +197,9 @@ public class AddPropertyFrame {
 		next_btn.setBounds(539, 584, 116, 39);
 		next_btn.setEnabled(false);
 		next_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 
 				String isBreakfastString = String.valueOf(isBreakfast_chkbox.isSelected() ? 1 : 0);
@@ -264,6 +277,10 @@ public class AddPropertyFrame {
 
 	}
 
+	/**
+	 * checking whether all the fields have been completed
+	 * @return boolean for completion status
+	 */
 	private boolean areAllCompleted() {
 		boolean ok = false;
 			if (propertyName_txtField.getText().length() == 0 || location_txtField.getText().length() == 0

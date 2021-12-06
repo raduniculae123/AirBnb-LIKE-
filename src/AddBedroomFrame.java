@@ -1,7 +1,3 @@
-
-
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import java.awt.Color;
 import java.awt.GridBagLayout;
@@ -21,6 +17,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ *a class for adding the bedroom details
+ */
 public class AddBedroomFrame {
 	private static int bedrooms = 0;
 	private static int beds = 0;
@@ -42,6 +41,7 @@ public class AddBedroomFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param sleepingId
 	 */
 	private void initialize(int sleepingId) {
 		frmAddBedroom = new JFrame();
@@ -54,6 +54,9 @@ public class AddBedroomFrame {
 		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE };
 		frmAddBedroom.getContentPane().setLayout(gridBagLayout);
 
+		/**
+		 * adding the comboboxes and labels
+		 */
 		JLabel addBedroom_lbl = new JLabel("Add Bedroom");
 		addBedroom_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addBedroom_lbl = new GridBagConstraints();
@@ -106,6 +109,9 @@ public class AddBedroomFrame {
 
 		JButton addAnotherBedroom_btn = new JButton("Add another bedroom");
 		addAnotherBedroom_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the text fields in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 

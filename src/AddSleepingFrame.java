@@ -1,6 +1,5 @@
 
 
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import java.awt.Color;
@@ -22,6 +21,9 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.awt.event.ActionEvent;
 
+/**
+ * a class for adding the outdoor details
+ */
 public class AddSleepingFrame {
 
 	JFrame frmAddSleeping;
@@ -40,6 +42,7 @@ public class AddSleepingFrame {
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @param propertyId
 	 */
 	private void initialize(int facilityId) {
 		System.out.println("muie din sleeping");
@@ -55,6 +58,9 @@ public class AddSleepingFrame {
 				Double.MIN_VALUE };
 		frmAddSleeping.getContentPane().setLayout(gridBagLayout);
 
+		/**
+		 * adding the checkboxes and labels
+		 */
 		JLabel addSleeping_lbl = new JLabel("Add Sleeping Facilities");
 		addSleeping_lbl.setFont(new Font("Tahoma", Font.PLAIN, 40));
 		GridBagConstraints gbc_addSleeping_lbl = new GridBagConstraints();
@@ -88,6 +94,9 @@ public class AddSleepingFrame {
 
 		JButton toAddBedroom_btn = new JButton("Add bedroom");
 		toAddBedroom_btn.addActionListener(new ActionListener() {
+			/**
+			 * inserts the contents of the checkboxes in the database
+			 */
 			public void actionPerformed(ActionEvent e) {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
