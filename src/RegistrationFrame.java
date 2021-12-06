@@ -1,5 +1,4 @@
 
-
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -44,8 +43,9 @@ public class RegistrationFrame {
 	static final String DB_URL = "jdbc:mysql://stusql.dcs.shef.ac.uk/team002";
 	static final String USER = "team002";
 	static final String PASS = "38695e46";
-	private static final String SQL_INSERT = "INSERT INTO team002.users (title,forename,surname,email,password,mobilenumber,guest,host,house,postcode) VALUES (?,?,?,?,?,?,?,?,?,?)";
+	private static final String SQL_INSERT = "INSERT INTO team002.users (title,forename,surname,email,password,mobilenumber,guest,host,house,postcode,salt) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
 	private static final String SQL_INSERT2 = "INSERT INTO team002.addresses (house,postcode,street,place,isProperty) VALUES (?,?,?,?,?)";
+	private static final String SQL_GET = "SELECT salt FROM team002.users where id = (SELECT max(id) FROM team002.users)";
 	private JTextField house_txtField;
 	private JTextField street_txtField;
 	private JTextField place_txtField;
@@ -93,8 +93,8 @@ public class RegistrationFrame {
 		gridBagLayout.rowHeights = new int[] { 12, 38, 0, 0, 0, 0, 0, 44, 35, 0, 0, 0, 0, 0, 0, 0, 0 };
 		gridBagLayout.columnWeights = new double[] { 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0,
 				0.0, 0.0, Double.MIN_VALUE };
-		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
-				Double.MIN_VALUE };
+		gridBagLayout.rowWeights = new double[] { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,
+				0.0, 0.0, Double.MIN_VALUE };
 		frmRegister.getContentPane().setLayout(gridBagLayout);
 
 		JLabel register_lbl = new JLabel("Register");
@@ -116,20 +116,37 @@ public class RegistrationFrame {
 				try (Connection conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
 						PreparedStatement stmt = conn.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS);
-						PreparedStatement stmt2 = conn.prepareStatement(SQL_INSERT2, Statement.RETURN_GENERATED_KEYS);) {
+						PreparedStatement stmt2 = conn.prepareStatement(SQL_INSERT2,
+								Statement.RETURN_GENERATED_KEYS);
+						PreparedStatement stmt3 = conn.prepareStatement(SQL_GET, Statement.RETURN_GENERATED_KEYS);) {
 					printVar();
+					String password = String.valueOf(password_txtField.getPassword());
+					System.out.println(password);
+					byte[] salt = HashAndSQLTest.salt();
+					System.out.println("saltinreg: " + new String(salt));
+					String hashpassword = HashAndSQLTest.hashGeneration(password, salt);
+					System.out.println(hashpassword);
 					stmt.setString(1, title_txtField.getText());
 					stmt.setString(2, forename_txtField.getText());
 					stmt.setString(3, surname_txtField.getText());
 					stmt.setString(4, email_txtField.getText());
-					stmt.setString(5, new String(password_txtField.getPassword()));
+					stmt.setString(5, hashpassword);
 					stmt.setString(6, mobileNumber_txtField.getText());
 					stmt.setString(7, isGuestString);
 					stmt.setString(8, isHostString);
 					stmt.setString(9, house_txtField.getText());
 					stmt.setString(10, postcode_txtField.getText());
+					stmt.setString(11, new String(salt));
 					stmt.executeUpdate();
+					
+					stmt3.executeQuery();
+					ResultSet rs3 = stmt3.executeQuery();;
+					System.out.println("cristos");
+					if(rs3.next()) {
+						System.out.println("verif" + rs3.getString("salt"));
+					}
 					ResultSet rs = stmt.getGeneratedKeys();
+					
 
 					stmt2.setString(1, house_txtField.getText());
 					stmt2.setString(2, postcode_txtField.getText());
@@ -137,7 +154,7 @@ public class RegistrationFrame {
 					stmt2.setString(4, place_txtField.getText());
 					stmt2.setString(5, "0");
 					stmt2.executeUpdate();
-					
+
 					if (rs.next()) {
 						generatedKey = rs.getInt(1);
 					}
@@ -153,7 +170,7 @@ public class RegistrationFrame {
 
 			}
 		});
-		
+
 		JLabel house_lbl = new JLabel("House");
 		house_lbl.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		GridBagConstraints gbc_house_lbl = new GridBagConstraints();
@@ -161,7 +178,7 @@ public class RegistrationFrame {
 		gbc_house_lbl.gridx = 4;
 		gbc_house_lbl.gridy = 8;
 		frmRegister.getContentPane().add(house_lbl, gbc_house_lbl);
-		
+
 		house_txtField = new JTextField();
 		house_txtField.setColumns(10);
 		GridBagConstraints gbc_house_txtField = new GridBagConstraints();
@@ -170,7 +187,7 @@ public class RegistrationFrame {
 		gbc_house_txtField.gridx = 5;
 		gbc_house_txtField.gridy = 8;
 		frmRegister.getContentPane().add(house_txtField, gbc_house_txtField);
-		
+
 		JLabel street_lbl = new JLabel("Street");
 		street_lbl.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		GridBagConstraints gbc_street_lbl = new GridBagConstraints();
@@ -178,7 +195,7 @@ public class RegistrationFrame {
 		gbc_street_lbl.gridx = 4;
 		gbc_street_lbl.gridy = 9;
 		frmRegister.getContentPane().add(street_lbl, gbc_street_lbl);
-		
+
 		street_txtField = new JTextField();
 		street_txtField.setColumns(10);
 		GridBagConstraints gbc_street_txtField = new GridBagConstraints();
@@ -187,7 +204,7 @@ public class RegistrationFrame {
 		gbc_street_txtField.gridx = 5;
 		gbc_street_txtField.gridy = 9;
 		frmRegister.getContentPane().add(street_txtField, gbc_street_txtField);
-		
+
 		JLabel place_lbl = new JLabel("Place name");
 		place_lbl.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		GridBagConstraints gbc_place_lbl = new GridBagConstraints();
@@ -195,7 +212,7 @@ public class RegistrationFrame {
 		gbc_place_lbl.gridx = 4;
 		gbc_place_lbl.gridy = 10;
 		frmRegister.getContentPane().add(place_lbl, gbc_place_lbl);
-		
+
 		place_txtField = new JTextField();
 		place_txtField.setColumns(10);
 		GridBagConstraints gbc_place_txtField = new GridBagConstraints();
@@ -204,7 +221,7 @@ public class RegistrationFrame {
 		gbc_place_txtField.gridx = 5;
 		gbc_place_txtField.gridy = 10;
 		frmRegister.getContentPane().add(place_txtField, gbc_place_txtField);
-		
+
 		JLabel postcode_lbl = new JLabel("Postcode");
 		postcode_lbl.setFont(new Font("Tahoma", Font.PLAIN, 30));
 		GridBagConstraints gbc_postcode_lbl = new GridBagConstraints();
@@ -212,7 +229,7 @@ public class RegistrationFrame {
 		gbc_postcode_lbl.gridx = 4;
 		gbc_postcode_lbl.gridy = 11;
 		frmRegister.getContentPane().add(postcode_lbl, gbc_postcode_lbl);
-		
+
 		postcode_txtField = new JTextField();
 		postcode_txtField.setColumns(10);
 		GridBagConstraints gbc_postcode_txtField = new GridBagConstraints();
@@ -247,8 +264,8 @@ public class RegistrationFrame {
 		title_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -273,8 +290,8 @@ public class RegistrationFrame {
 		email_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -298,8 +315,8 @@ public class RegistrationFrame {
 		password_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -324,8 +341,8 @@ public class RegistrationFrame {
 		mobileNumber_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -350,8 +367,8 @@ public class RegistrationFrame {
 		forename_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -376,8 +393,8 @@ public class RegistrationFrame {
 		surname_txtField.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) { // watch for key strokes
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
@@ -400,22 +417,22 @@ public class RegistrationFrame {
 		gbc_isHost_chkbox.gridx = 5;
 		gbc_isHost_chkbox.gridy = 13;
 		frmRegister.getContentPane().add(isHost_chkbox, gbc_isHost_chkbox);
-		
-				JButton toLogin_btn = new JButton("Already have an account?");
-				toLogin_btn.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						frmRegister.dispose();
-						LoginFrame window = new LoginFrame(1, 0);
-						window.frmLogin.setVisible(true);
-					}
-				});
-				toLogin_btn.setFont(new Font("Tahoma", Font.PLAIN, 20));
-				GridBagConstraints gbc_toLogin_btn = new GridBagConstraints();
-				gbc_toLogin_btn.insets = new Insets(0, 0, 0, 5);
-				gbc_toLogin_btn.gridx = 4;
-				gbc_toLogin_btn.gridy = 15;
-				frmRegister.getContentPane().add(toLogin_btn, gbc_toLogin_btn);
-		
+
+		JButton toLogin_btn = new JButton("Already have an account?");
+		toLogin_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frmRegister.dispose();
+				LoginFrame window = new LoginFrame(1, 0);
+				window.frmLogin.setVisible(true);
+			}
+		});
+		toLogin_btn.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		GridBagConstraints gbc_toLogin_btn = new GridBagConstraints();
+		gbc_toLogin_btn.insets = new Insets(0, 0, 0, 5);
+		gbc_toLogin_btn.gridx = 4;
+		gbc_toLogin_btn.gridy = 15;
+		frmRegister.getContentPane().add(toLogin_btn, gbc_toLogin_btn);
+
 		JButton enquirer_btn = new JButton("Enquirer menu");
 		enquirer_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -434,23 +451,23 @@ public class RegistrationFrame {
 		isHost_chkbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
 		});
-		
+
 		isGuest_chkbox.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent e) {
 				if (areAllCompleted()) {
-					register_btn.setEnabled(true);}
-				else {
+					register_btn.setEnabled(true);
+				} else {
 					register_btn.setEnabled(false);
 				}
 			}
 		});
-		
+
 	}
 
 	private boolean areAllCompleted() {
