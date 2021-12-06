@@ -77,7 +77,7 @@ public class PrivateInfoFrame {
 		JButton back_btn = new JButton("Back");
 		back_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				ViewPropertyFrame window = new ViewPropertyFrame(propertyID, 2, userID, isBooked);
+				ViewPropertyFrame window = new ViewPropertyFrame(propertyID, 2, userID, 1);
 				window.frmViewProperty.setVisible(true);
 				privateFrame.dispose();
 			}

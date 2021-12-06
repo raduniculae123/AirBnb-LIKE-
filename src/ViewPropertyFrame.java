@@ -175,7 +175,7 @@ public class ViewPropertyFrame {
 			}
 		});
 		back_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
-		back_btn.setBounds(857, 35, 144, 48);
+		back_btn.setBounds(910, 11, 144, 48);
 		frmViewProperty.getContentPane().add(back_btn);
 		
 		JButton viewInfo_btn = new JButton("View informations");
@@ -190,6 +190,19 @@ public class ViewPropertyFrame {
 		viewInfo_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
 		viewInfo_btn.setBounds(10, 70, 297, 48);
 		frmViewProperty.getContentPane().add(viewInfo_btn);
+		
+		JButton review_btn = new JButton("Review");
+		review_btn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ReviewFrame window = new ReviewFrame(propertyID, userID);
+				window.frmReview.setVisible(true);
+				frmViewProperty.dispose();
+			}
+		});
+		review_btn.setFont(new Font("Tahoma", Font.BOLD, 25));
+		review_btn.setEnabled(false);
+		review_btn.setBounds(910, 70, 144, 48);
+		frmViewProperty.getContentPane().add(review_btn);
 		if (fromWhere == 1) {
 			back_btn.setEnabled(false);
 		} else {
@@ -495,6 +508,7 @@ public class ViewPropertyFrame {
 		
 		if(isBooked == 1) {
 			viewInfo_btn.setEnabled(true);
+			review_btn.setEnabled(true);
 		}
 
 	}
