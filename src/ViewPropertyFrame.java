@@ -181,7 +181,7 @@ public class ViewPropertyFrame {
 		JButton viewInfo_btn = new JButton("View informations");
 		viewInfo_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PrivateInfoFrame window = new PrivateInfoFrame(propertyID, fromWhere, userID, isBooked);
+				PrivateInfoFrame window = new PrivateInfoFrame(propertyID, userID, fromWhere, isBooked);
 				window.privateFrame.setVisible(true);
 				frmViewProperty.dispose();
 			}

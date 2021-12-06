@@ -120,6 +120,7 @@ public class LoginFrame {
 										ResultSet rs3 = stmt3.executeQuery();
 										if (rs3.next()) {
 											int userId = ((Number) rs3.getObject(1)).intValue();
+											System.out.println("for email " + email_txtField.getText() + "user id is: " + userId);
 											if (fromWhere == 0) {
 												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId, 0);
 												window2.frmViewProperty.setVisible(true);
@@ -138,6 +139,7 @@ public class LoginFrame {
 										if (rs3.next()) {
 											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
+											System.out.println("for email " + email_txtField.getText() + "user id is: " + userId);
 											if (fromWhere == 0) {
 												ViewPropertyFrame window2 = new ViewPropertyFrame(properyID, 1, userId, 0);
 												window2.frmViewProperty.setVisible(true);
@@ -156,6 +158,7 @@ public class LoginFrame {
 										if (rs3.next()) {
 											System.out.println("elo");
 											int userId = ((Number) rs3.getObject(1)).intValue();
+											System.out.println("for email " + email_txtField.getText() + "user id is: " + userId);
 											HostMenuFrame window = new HostMenuFrame(userId);
 											window.hostMenuFrame.setVisible(true);
 											frmLogin.dispose();

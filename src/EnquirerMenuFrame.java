@@ -240,7 +240,6 @@ public class EnquirerMenuFrame {
 									rs2.getString("location"), hasBreakfast });
 							propertyIdArray[rowNr] = rs2.getInt("id");
 							rowNr++;
-							
 
 						}
 					}
@@ -255,8 +254,6 @@ public class EnquirerMenuFrame {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
-				for(int i=0; i<50; i++)
-					System.out.println(propertyIdArray[i]);
 
 			}
 		});
