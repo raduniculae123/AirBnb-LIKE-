@@ -110,8 +110,7 @@ public class BookingsFrame {
 						model.addRow(new Object[] { rs2.getString("title"), rs2.getString("forename"),
 								rs2.getString("surname"), rs.getString("startDate"), rs.getString("endDate"),
 								"Accepted", "Accepted" });
-					}
-					else if (rs.getInt("status") == 2) {
+					} else if (rs.getInt("status") == 2) {
 						model.addRow(new Object[] { rs2.getString("title"), rs2.getString("forename"),
 								rs2.getString("surname"), rs.getString("startDate"), rs.getString("endDate"),
 								"Declined", "Declined" });
@@ -156,12 +155,15 @@ public class BookingsFrame {
 			public void mouseClicked(java.awt.event.MouseEvent evt) {
 				int row = table.rowAtPoint(evt.getPoint());
 				int col = table.columnAtPoint(evt.getPoint());
-				if (row >= 0 && col >= 0 && (!(table.getModel().getValueAt(row, col).toString().equals("Accepted")) || !(table.getModel().getValueAt(row, col).toString().equals("Declined")))) {
+				if (row >= 0 && col >= 0 && (!(table.getModel().getValueAt(row, col).toString().equals("Accepted"))
+						&& !(table.getModel().getValueAt(row, col).toString().equals("Declined")))) {
 					if (col == 5) {
 						acceptBooking(row, propertyID, userID);
 					} else if (col == 6) {
 						declineBooking(row, propertyID, userID);
 					}
+				} else {
+					System.out.println("conditie gresita");
 				}
 			}
 
