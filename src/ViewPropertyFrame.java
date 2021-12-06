@@ -178,7 +178,7 @@ public class ViewPropertyFrame {
 		back_btn.setBounds(910, 11, 144, 48);
 		frmViewProperty.getContentPane().add(back_btn);
 		
-		JButton viewInfo_btn = new JButton("View informations");
+		JButton viewInfo_btn = new JButton("View information");
 		viewInfo_btn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				PrivateInfoFrame window = new PrivateInfoFrame(propertyID, userID, fromWhere, isBooked);
