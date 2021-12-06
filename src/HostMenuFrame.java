@@ -63,7 +63,7 @@ public class HostMenuFrame {
 		hostMenuFrame.setBackground(Color.ORANGE);
 		hostMenuFrame.getContentPane().setLayout(null);
 		JScrollPane table_pane = new JScrollPane();
-		table_pane.setBounds(10, 105, 1044, 565);
+		table_pane.setBounds(10, 105, 1044, 528);
 		hostMenuFrame.getContentPane().add(table_pane);
 
 		myProperties_table = new JTable();
@@ -177,6 +177,18 @@ public class HostMenuFrame {
 			enquirer_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
 			enquirer_btn.setBounds(754, 30, 255, 45);
 			hostMenuFrame.getContentPane().add(enquirer_btn);
+			
+			JButton logout_btn = new JButton("Log Out");
+			logout_btn.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					LoginFrame window = new LoginFrame(1, 0);
+					window.frmLogin.setVisible(true);
+					hostMenuFrame.dispose();
+				}
+			});
+			logout_btn.setFont(new Font("Tahoma", Font.PLAIN, 30));
+			logout_btn.setBounds(398, 636, 255, 45);
+			hostMenuFrame.getContentPane().add(logout_btn);
 
 			myProperties_table.getColumnModel().getColumn(0).setPreferredWidth(451);
 			myProperties_table.getColumnModel().getColumn(1).setPreferredWidth(451);
